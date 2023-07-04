@@ -1,0 +1,87 @@
+Signature-Version: 1.0
+SHA-256-Digest-Manifest-Main-Attributes: V8f5TZwveeSkCc9vd0BjZ8FBa0F8E
+ 21a+0gSjKQ3yAw=
+SHA-256-Digest-Manifest: S8DxUFE+Vrv+H6pZhqreQpHsZzose12SJaMAeFtLNC4=
+Created-By: 1.8.0_211 (Oracle Corporation)
+
+Name: assets/hcmb/models/item/stone_handle.json
+SHA-256-Digest: rfguJb/e7Om11yqu4UG0EXxlt2JSS6U4pMhZ9XUJKIo=
+
+Name: tk/zeitheron/hcmb/init/ItemsHM.java
+SHA-256-Digest: HbmxAxIAAWLgHGY759r6cmCA2v3fUjv3cJd1GYDiFSU=
+
+Name: mod_id_at.cfg
+SHA-256-Digest: cJgWy2O/TguXCdh7lGFD6bFM92sXiHSryKWVKOVrpA8=
+
+Name: assets/hcmb/textures/items/iron_saw.png
+SHA-256-Digest: PrQx+WVEVN5ceLp5X6JERBGUpgSaWhipiiIagYAvho0=
+
+Name: tk/zeitheron/hcmb/items/ItemSaw.java
+SHA-256-Digest: kUgOkTHX6MRtNn7Qi9uk1Ors1SXjEEbC81lTQsjoltk=
+
+Name: tk/zeitheron/hcmb/HammerMicroblocks.java
+SHA-256-Digest: 38ShaKLyXiFS6MqF2hkQqH+C9zjwK7Uw++/I+/X+m5o=
+
+Name: tk/zeitheron/hcmb/proxy/ClientProxy.java
+SHA-256-Digest: z4fNVj/UJIoE1VAL8WPBYKC7gqdTsjE+zmY2KJsdeR8=
+
+Name: assets/hcmb/lang/en_us.lang
+SHA-256-Digest: rwOOR2CrroBcJEXEKQEHhAIkK55fQbhTJH5ZTzQ6d9Q=
+
+Name: assets/hcmb/lang/ru_ru.lang
+SHA-256-Digest: KRaFK2vIUYrKUBlsn2Q4kxQWLrwmykZLcoA44WVpV+g=
+
+Name: assets/hcmb/textures/items/diamond_saw.png
+SHA-256-Digest: bYQXDE0kM5ZGDVYd7hWPb13w5bN+oLf+Bvea3KM3ViE=
+
+Name: tk/zeitheron/hcmb/recipes/RecipeAddMicroblocks.java
+SHA-256-Digest: eitLgJu9iSC19kidqBbqNbx9Tak82vT4SB59rZrtEyk=
+
+Name: assets/hcmb/textures/items/bedrock_saw.png
+SHA-256-Digest: 4Ycmvhx2VXMAaw7FeQmB8Bl0jJMVCjwZ8y0zQ5ofH6g=
+
+Name: tk/zeitheron/hcmb/items/ItemMicroblock.java
+SHA-256-Digest: nyTIO4UBEVjQCLcVWGzi1eqV7ihqlaseZ9cFHsk8acQ=
+
+Name: assets/hcmb/textures/items/stone_handle.png
+SHA-256-Digest: Q29EO4vXArYFIJTdqq/9/NKxHwufPf9yts4lVuMGt/E=
+
+Name: pack.mcmeta
+SHA-256-Digest: nM7ubC2brTVvPQBFNs9HkK7xoVp3LfxTIT4XnfzHqnU=
+
+Name: tk/zeitheron/hcmb/multipart/MultipartMicroblock.java
+SHA-256-Digest: +c2ebf1E5pvu+91TCYC8abcsibjcS2NyBFad5UE7Lms=
+
+Name: assets/hcmb/textures/items/gold_saw.png
+SHA-256-Digest: Qa0GyrFmDo8b9Lk/r8Z7R+waZ1QFZ/LT48rpKdsDNTo=
+
+Name: logo.png
+SHA-256-Digest: jWMU5tHXvewuKOjAC9gq4x9VqtAgyM6H0wH1tcVvZCw=
+
+Name: tk/zeitheron/hcmb/recipes/RecipeCutMicroblock.java
+SHA-256-Digest: q7d5oOaANV/DzYUOXdExkI+PwvKp3RboKkd+0F3ZcZI=
+
+Name: tk/zeitheron/hcmb/client/models/ModelSaw.java
+SHA-256-Digest: PjfrY4JCwifWcFq0fLZwujEtC8uoc0deh4/bPVJgCZA=
+
+Name: tk/zeitheron/hcmb/client/render/RenderItemMicroblock.java
+SHA-256-Digest: yONhUT9mnnKxcYwLS+qOr+DsrH3E8BQj/3/i4UVbKjE=
+
+Name: tk/zeitheron/hcmb/client/render/RenderItemSaw.java
+SHA-256-Digest: t0RNKehSoUg+X++VztzbktF9fa9V5IN3+2zC5WUkhGU=
+
+Name: tk/zeitheron/hcmb/proxy/CommonProxy.java
+SHA-256-Digest: nfZFX1jN1zrruKPS3cuZUXLk8RjtyfRq3AvLuGpFIeM=
+
+Name: tk/zeitheron/hcmb/client/render/RenderWorldHook.java
+SHA-256-Digest: 6Ophv8+ITNoZR3odJ8+npg3Tse2sdn1tapmetozoNkc=
+
+Name: tk/zeitheron/hcmb/init/RecipesHM.java
+SHA-256-Digest: GNPFTUAjVSM+ikMPkUML7IuaUWk0eJTbAyXZtZPfLnI=
+
+Name: assets/hcmb/textures/items/emerald_saw.png
+SHA-256-Digest: UOUj4LaiSuTrmZGDssIjYDXM75fmSYdS1IVLNcjuCeU=
+
+Name: mcmod.info
+SHA-256-Digest: 8FHIQJRaJgHLq5dsY3ExVQzeC2y1AwOAcAYrZfpvSFo=
+

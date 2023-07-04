@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "org.zeith.multipart.microblocks.mixins",
+  "refmap": "mixins.hammermicroblocks.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "client.TextureAtlasMixin"
+  ],
+  "server": [
+	]
+}

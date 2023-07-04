@@ -157,6 +157,10 @@ dependencies {
         implementation "org.zeith.hammerlib:HammerLib-${config.mc_version}:${config.hl_version}:deobf"
     }
 
+    if (hasConfig("hmp_version") && !config.hmp_version.isEmpty()) {
+        implementation "org.zeith.multipart:HammerMultipart-${config.mc_version}:${config.hmp_version}:deobf"
+    }
+
     if (hasConfig("jei_version") && !config.jei_version.isEmpty()) {
         compileOnly fg.deobf("mezz.jei:jei-${config.mc_version}-common-api:${config.jei_version}")
         compileOnly fg.deobf("mezz.jei:jei-${config.mc_version}-forge-api:${config.jei_version}")
@@ -234,6 +238,7 @@ def replaceProperties = [
         mod_id           : config.mod_id, mod_name: config.mod_name, mod_license: config.mod_license, mod_version: config.mod_version,
         mod_authors      : config.mod_authors, mod_description: config.mod_description,
         hl_version       : config.hl_version, modrinth_project: config.modrinth_project,
+		hmp_version      : config.hmp_version,
         issue_tracker_url: config.issue_tracker_url, mod_credits: config.mod_credits
 ]
 processResources {

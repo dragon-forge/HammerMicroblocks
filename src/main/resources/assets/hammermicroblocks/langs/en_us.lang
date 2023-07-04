@@ -1,0 +1,14 @@
+
+creative_tab.hammermicroblocks.parts=Hammer Microblocks
+
+microblock_type.hammermicroblocks.slab=Slab
+microblock_type.hammermicroblocks.panel=Panel
+microblock_type.hammermicroblocks.cover=Cover
+microblock_type.hammermicroblocks.pillar=Pillar
+
+item.hammermicroblocks.microblock=Microblock
+item.hammermicroblocks.microblock_formatted=%s (%s)
+
+item.hammermicroblocks.iron_saw=Iron Saw
+item.hammermicroblocks.diamond_saw=Diamond Saw
+item.hammermicroblocks.netherite_saw=Netherite Saw

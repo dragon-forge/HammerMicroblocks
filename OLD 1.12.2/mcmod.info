@@ -1,0 +1,11 @@
+[
+	{
+	  "modid": "hcmb",
+	  "name": "Hammer Microblocks",
+	  "description": "This mod adds decorative microblocks to Hammer Core Multipart API to allow users to have facades and prevent unwanted connections between multipart. Hammer Microblocks adds a creative tab with all possible blocks that can be used as decoration. There are 3 types of microblocks: Slab, Panel and Cover.",
+	  "version": "${version}",
+	  "mcversion": "${mcversion}",
+	  "logoFile": "logo.png",
+	  "authorList": ["Zeitheron"]
+	}
+]

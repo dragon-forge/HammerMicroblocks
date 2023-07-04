@@ -1,0 +1,12 @@
+package org.zeith.multipart.microblocks.init;
+
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import org.zeith.hammerlib.annotations.*;
+import org.zeith.multipart.microblocks.recipes.RecipeCutMicroblock;
+
+@SimplyRegister
+public interface RecipeSerializersHM
+{
+	@RegistryName("microblock_cutting")
+	RecipeSerializer<?> MICROBLOCK_CUTTING_SERIALIZER = new RecipeCutMicroblock.SimpleSerializer();
+}

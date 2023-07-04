@@ -1,0 +1,18 @@
+﻿
+itemGroup.hcmb=Hammer Microblocks
+itemGroup.hcmb.microblocks=Hammer Microblocks (Части)
+
+item.hcmb:microblock.name=&type из &material
+item.hcmb:stone_handle.name=Каменная ручка
+item.hcmb:iron_saw.name=Железная пила
+item.hcmb:gold_saw.name=Золотая пила
+item.hcmb:diamond_saw.name=Алмазная пила
+item.hcmb:emerald_saw.name=Изумрудная пила
+item.hcmb:bedrock_saw.name=Пила из бедрока
+
+hcmb:type.cover=Крышка
+hcmb:type.anticover=Анти-крышка
+hcmb:type.panel=Панель
+hcmb:type.slab=Полублок
+hcmb:type.antipanel=Анти-панель
+hcmb:type.antislab=Анти-полублок
