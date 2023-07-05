@@ -77,15 +77,15 @@ public class MicroblockItemModel
 		@Override
 		public List<RenderType> getRenderTypes(ItemStack itemStack, boolean fabulous)
 		{
-			var state = ItemsHM.MICROBLOCK.getFacadeBlockStateForRendering(itemStack);
-			var model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+			var state = ItemsHM.MICROBLOCK.getMicroblockMaterialStack(itemStack);
+			var model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(state);
 			return model.getRenderTypes(itemStack, fabulous);
 		}
 		
 		@Override
 		public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous)
 		{
-			var state = ItemsHM.MICROBLOCK.getFacadeBlockStack(itemStack);
+			var state = ItemsHM.MICROBLOCK.getMicroblockMaterialStack(itemStack);
 			var type = ItemsHM.MICROBLOCK.getMicroblockType(itemStack);
 			
 			return List.of(new BakedMicroblockModelSpecific(

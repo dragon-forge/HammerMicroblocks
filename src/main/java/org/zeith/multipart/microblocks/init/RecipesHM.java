@@ -73,15 +73,5 @@ public class RecipesHM
 				MicroblockTypesHM.COVER,
 				2
 		));
-		
-		
-		e.add(new MicroblockConversionRecipe(
-				List.of(
-						new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.COVER)),
-						new MicroblockInput(-1, 0, MicroblockIngredient.of(MicroblockTypesHM.PANEL))
-				),
-				MicroblockTypesHM.SLAB,
-				1
-		));
 	}
 }

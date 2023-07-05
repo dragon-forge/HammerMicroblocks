@@ -15,10 +15,12 @@ import org.zeith.hammerlib.HammerLib;
 import org.zeith.hammerlib.api.items.ITabItem;
 import org.zeith.hammerlib.event.recipe.BuildTagsEvent;
 import org.zeith.multipart.api.item.IMultipartPlacerItem;
-import org.zeith.multipart.api.placement.PlacedPartConfiguration;
+import org.zeith.multipart.api.placement.*;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.MicroblockType;
-import org.zeith.multipart.microblocks.init.TagsHM;
+import org.zeith.multipart.microblocks.api.tile.MicroblockState;
+import org.zeith.multipart.microblocks.init.*;
+import org.zeith.multipart.microblocks.multipart.MicroblockPartDefinition;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +34,27 @@ public class ItemMicroblock
 		super(props);
 		
 		HammerLib.EVENT_BUS.addListener(this::applyTags);
+	}
+	
+	@Override
+	public Optional<PlacedPartConfiguration> getPlacement(Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit)
+	{
+		var state = new MicroblockState();
+		PartPlacement placement = null;
+		
+		var mbt = getMicroblockType(stack);
+		var mat = getMicroblockMaterialStack(stack);
+		
+		if(mbt == null || mat.isEmpty()) return Optional.empty();
+		
+		state.setType(mbt)
+				.setMaterial(mat);
+		
+		placement = mbt.getPlacementGrid().pickPlacement(player, hit);
+		
+		if(placement != null && state.isValid())
+			return Optional.of(new PlacedPartConfiguration(PartDefinitionsHM.MICROBLOCK, new MicroblockPartDefinition.MicroblockConfiguration(state), placement));
+		return Optional.empty();
 	}
 	
 	private void applyTags(BuildTagsEvent e)
@@ -89,7 +112,7 @@ public class ItemMicroblock
 	}
 	
 	@NotNull
-	public ItemStack getFacadeBlockStack(ItemStack stack)
+	public ItemStack getMicroblockMaterialStack(ItemStack stack)
 	{
 		var nbt = stack.getTagElement("Microblock");
 		if(nbt == null) return ItemStack.EMPTY;
@@ -98,21 +121,13 @@ public class ItemMicroblock
 	}
 	
 	@Nullable
-	public BlockState getFacadeBlockState(ItemStack is)
+	public BlockState getMicroblockMaterialState(ItemStack is)
 	{
-		var baseItemStack = getFacadeBlockStack(is);
+		var baseItemStack = getMicroblockMaterialStack(is);
 		if(baseItemStack.isEmpty()) return null;
 		var block = Block.byItem(baseItemStack.getItem());
 		if(block == Blocks.AIR) return null;
 		return block.defaultBlockState();
-	}
-	
-	@NotNull
-	public BlockState getFacadeBlockStateForRendering(ItemStack is)
-	{
-		var st = getFacadeBlockState(is);
-		if(st == null) st = Blocks.STONE.defaultBlockState();
-		return st;
 	}
 	
 	public ItemStack forItem(MicroblockType type, ItemStack itemStack, boolean returnItem)
@@ -167,7 +182,7 @@ public class ItemMicroblock
 	{
 		try
 		{
-			var in = this.getFacadeBlockStack(is);
+			var in = this.getMicroblockMaterialStack(is);
 			var type = this.getMicroblockType(is);
 			
 			if(!in.isEmpty() && type != null)
@@ -177,12 +192,6 @@ public class ItemMicroblock
 		{
 		}
 		return super.getName(is);
-	}
-	
-	@Override
-	public Optional<PlacedPartConfiguration> getPlacement(Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit)
-	{
-		return Optional.empty();
 	}
 	
 	@Override

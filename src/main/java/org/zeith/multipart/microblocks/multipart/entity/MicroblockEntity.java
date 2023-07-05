@@ -1,14 +1,27 @@
 package org.zeith.multipart.microblocks.multipart.entity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.ForgeHooks;
+import org.jetbrains.annotations.Nullable;
+import org.zeith.hammerlib.api.io.NBTSerializable;
 import org.zeith.multipart.api.*;
 import org.zeith.multipart.api.placement.PartPlacement;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
 
+import java.util.List;
+
 public class MicroblockEntity
 		extends PartEntity
 {
+	@NBTSerializable("State")
 	public final MicroblockState state = new MicroblockState();
 	
 	public MicroblockEntity(PartDefinition definition, PartContainer container, PartPlacement placement)
@@ -25,19 +38,45 @@ public class MicroblockEntity
 	}
 	
 	@Override
+	public ItemStack getCloneItemStack(BlockHitResult target, Player player, IndexedVoxelShape selection)
+	{
+		return state.asStack();
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(@Nullable ServerPlayer harvester, LootParams.Builder context)
+	{
+		return List.of(state.asStack());
+	}
+	
+	@Override
+	protected VoxelShape updateShape()
+	{
+		return state.getType().getShape(placement);
+	}
+	
+	@Override
+	public VoxelShape getPartOccupiedShapeWith(PartEntity toBePlaced, VoxelShape shapeOfEntity)
+	{
+		if(toBePlaced instanceof MicroblockEntity mbe)
+			return state.getType().getOccupationShapeFor(placement, mbe.state.getType(), mbe.placement(), mbe);
+		return getShape();
+	}
+	
+	@Override
 	public boolean canHarvestPart(Player player)
 	{
-		return super.canHarvestPart(player);
+		return ForgeHooks.isCorrectToolForDrops(state.asBlockState(), player);
 	}
 	
 	@Override
 	public float getDestroySpeed(Player player)
 	{
-		return super.getDestroySpeed(player);
+		return state.asBlockState().getDestroySpeed(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
 	}
 	
 	public SoundType getSoundType()
 	{
-		return SoundType.STONE;
+		return state.asBlockState().getSoundType();
 	}
 }

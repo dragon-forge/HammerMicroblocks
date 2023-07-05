@@ -114,16 +114,16 @@ public class RecipeCutMicroblock
 		MicroblockType theType;
 		if(cutStack.getItem() instanceof ItemMicroblock imc)
 		{
-			theState = imc.getFacadeBlockState(cutStack);
+			theState = imc.getMicroblockMaterialState(cutStack);
 			theType = imc.getMicroblockType(cutStack);
 			if(theState == null || theType == null) return null;
-			return new MicroblockedStack(relX, relY, false, Optional.of(theType), theState, imc.getFacadeBlockStack(cutStack));
+			return new MicroblockedStack(relX, relY, false, Optional.of(theType), theState, imc.getMicroblockMaterialStack(cutStack));
 		} else
 		{
 			theType = MicroblockTypesHM.SLAB;
 			var mcb = ItemsHM.MICROBLOCK.forItem(theType, cutStack, false);
 			if(mcb.isEmpty()) return null;
-			theState = ItemsHM.MICROBLOCK.getFacadeBlockState(mcb);
+			theState = ItemsHM.MICROBLOCK.getMicroblockMaterialState(mcb);
 			if(theState == null) return null;
 			return new MicroblockedStack(relX, relY, true, Optional.empty(), theState, cutStack.copyWithCount(1));
 		}

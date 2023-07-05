@@ -1,7 +1,10 @@
 
 creative_tab.hammermicroblocks.parts=Hammer Microblocks
 
+microblock_type.hammermicroblocks.anti_cover=Anti-Cover
+microblock_type.hammermicroblocks.triple_panel=Triple Panel
 microblock_type.hammermicroblocks.slab=Slab
+microblock_type.hammermicroblocks.triple_cover=Triple Cover
 microblock_type.hammermicroblocks.panel=Panel
 microblock_type.hammermicroblocks.cover=Cover
 microblock_type.hammermicroblocks.pillar=Pillar
