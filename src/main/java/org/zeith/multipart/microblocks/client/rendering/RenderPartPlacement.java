@@ -49,8 +49,6 @@ public class RenderPartPlacement
 		var lines = grid.getLinesForRendering(pl, bounds, hit);
 		if(lines.isEmpty()) return;
 		
-		var placement = grid.pickPlacement(pl, hit);
-		
 		VertexConsumer vb = e.getMultiBufferSource().getBuffer(RenderType.lines());
 		
 		var pose = e.getPoseStack();
@@ -95,6 +93,8 @@ public class RenderPartPlacement
 			}
 		}
 		
+		var placement = grid.pickPlacement(pl, hit, pos.equals(hit.getBlockPos()));
+		
 		if(placement != null)
 		{
 			var hitDir = hit.getDirection();
@@ -104,8 +104,29 @@ public class RenderPartPlacement
 			c:
 			if(pc != null)
 			{
-				if(pc.getPartAt(placement) != null)
+				var loc = hit.getLocation().subtract(Vec3.atLowerCornerOf(hit.getBlockPos()));
+				
+				double axial = switch(hit.getDirection().getAxis())
+				{
+					case Y -> loc.y;
+					case X -> loc.x;
+					case Z -> loc.z;
+					default -> -1;
+				};
+				
+				double desired = hit.getDirection().getAxisDirection() == Direction.AxisDirection.NEGATIVE ? 0 : 1;
+				
+				if(Math.abs(axial - desired) < 0.001)
+				{
 					shift = true;
+					break c;
+				}
+				
+				if(pc.getPartAt(placement) != null)
+				{
+					shift = true;
+					break c;
+				}
 				
 				MicroblockPartDefinition.MicroblockConfiguration config = new MicroblockPartDefinition.MicroblockConfiguration(
 						new MicroblockState()
@@ -168,11 +189,19 @@ public class RenderPartPlacement
 			
 			VertexConsumer buf = e.getMultiBufferSource().getBuffer(RenderType.translucent());
 			
+			var finalPos = shift ? pos.relative(hitDir) : pos;
+			
+			var pl0 = grid.pickPlacement(pl, hit, finalPos.equals(hit.getBlockPos()));
+			if(pl0 != null)
+				placement = pl0;
+			
 			var strips = type.getModelStrips(placement);
+			
+			pc = BlockMultipartContainer.pc(mc.level, finalPos);
 			
 			var rng = RandomSource.create(pos.asLong());
 			for(RenderType layer : RenderType.chunkBufferLayers())
-				for(BakedQuad quad : ModelGeneratorSystem.generateMesh(type, placement, null, mc.level, pos, strips, microstate, null, rng, layer)
+				for(BakedQuad quad : ModelGeneratorSystem.generateMesh(type, placement, pc, mc.level, finalPos, strips, microstate, rng, layer)
 						.toBakedBlockQuads())
 					buf.putBulkData(last, quad, 1, 1, 1, 0.6F, 255, 0, true);
 		}

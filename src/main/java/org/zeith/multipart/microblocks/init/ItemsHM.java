@@ -7,6 +7,12 @@ import org.zeith.multipart.microblocks.items.*;
 @SimplyRegister
 public interface ItemsHM
 {
+	@RegistryName("gold_saw")
+	ItemSaw GOLD_SAW = new ItemSaw(Tiers.GOLD, 1, 0F, new Item.Properties().durability(512));
+	
+	@RegistryName("granite_saw")
+	ItemSaw GRANITE_SAW = new ItemSaw(Tiers.STONE, 1, 0F, new Item.Properties());
+	
 	@RegistryName("iron_saw")
 	ItemSaw IRON_SAW = new ItemSaw(Tiers.IRON, 2, 0F, new Item.Properties());
 	

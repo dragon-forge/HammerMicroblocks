@@ -9,24 +9,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.TierSortingRegistry;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.multipart.microblocks.api.MicroblockType;
-import org.zeith.multipart.microblocks.api.recipe.*;
+import org.zeith.multipart.microblocks.api.recipe.MicroblockedStack;
+import org.zeith.multipart.microblocks.api.recipe.combination.*;
 import org.zeith.multipart.microblocks.init.*;
 import org.zeith.multipart.microblocks.items.*;
 
 import java.util.*;
 
-public class RecipeCutMicroblock
+public class RecipeFuseMicroblock
 		implements CraftingRecipe
 {
-	protected final List<MicroblockConversionRecipe> conversions = GatherMicroblockConversionRecipesEvent.get();
+	protected final List<IMicroblockComboRecipe> conversions = GatherMicroblockComboRecipesEvent.get();
 	
 	protected final ResourceLocation id;
 	
-	public RecipeCutMicroblock(ResourceLocation id)
+	public RecipeFuseMicroblock(ResourceLocation id)
 	{
 		this.id = id;
 	}
@@ -58,57 +58,50 @@ public class RecipeCutMicroblock
 	@Override
 	public ItemStack assemble(CraftingContainer inv, RegistryAccess access)
 	{
-		int sawX = -1, sawY = -1;
-		var saw = ItemStack.EMPTY;
-		ItemSaw sawItem = null;
-		
 		var w = inv.getWidth();
 		var h = inv.getHeight();
-		for(int x = 0; x < w; ++x)
-			for(int y = 0; y < h; y++)
-			{
-				var item = inv.getItem(x + y * w).copyWithCount(1);
-				if(item.isEmpty()) continue;
-				
-				if(item.getItem() instanceof ItemSaw si)
-				{
-					if(!saw.isEmpty()) return ItemStack.EMPTY;
-					sawItem = si;
-					saw = item;
-					sawX = x;
-					sawY = y;
-				}
-			}
-		
-		if(saw.isEmpty() || sawItem == null) return ItemStack.EMPTY;
 		
 		// Gather all inputs
+		MicroblockedStack firstNonNull = null;
 		List<MicroblockedStack> inputs = Lists.newArrayList();
 		for(int x = 0; x < w; ++x)
 			for(int y = 0; y < h; y++)
 			{
 				var item = inv.getItem(x + y * w).copyWithCount(1);
-				if(item.isEmpty()) continue;
-				if(item.getItem() instanceof ItemSaw) continue;
-				var st = getStackFrom(item, x - sawX, y - sawY);
+				if(item.isEmpty())
+				{
+					inputs.add(null);
+					continue;
+				}
+				var st = getStackFrom(item, x, y);
 				
 				// ensure we have same block in every spot
-				if(st == null || (!inputs.isEmpty() && !inputs.get(0).sameState(st)))
+				if(st == null || (firstNonNull != null && !firstNonNull.sameState(st)))
 					return ItemStack.EMPTY;
 				
 				inputs.add(st);
+				if(firstNonNull == null)
+					firstNonNull = st;
 			}
 		
-		if(inputs.isEmpty()) return ItemStack.EMPTY;
+		if(inputs.isEmpty() || firstNonNull == null) return ItemStack.EMPTY;
 		
-		var theState = inputs.get(0).state();
-		if(!TierSortingRegistry.isCorrectTierForDrops(sawItem.getTier(), theState))
-			return ItemStack.EMPTY;
+		final var fnn = firstNonNull;
 		
-		for(MicroblockConversionRecipe conversion : conversions)
-			if(conversion.matches(inputs))
-				return ItemsHM.MICROBLOCK.forItem(conversion.output(), inputs.get(0)
-						.stateAsItem(), conversion.count(), false);
+		for(var fusion : conversions)
+		{
+			var res = fusion.matchAndGetResult(inputs, w, h);
+			
+			var result = res.map(r ->
+			{
+				if(r.outputIsFullBlock())
+					return inputs.get(0).stateAsItem().copyWithCount(r.count());
+				else
+					return ItemsHM.MICROBLOCK.forItem(r.type(), fnn.stateAsItem(), r.count(), false);
+			}).orElse(ItemStack.EMPTY);
+			
+			if(!result.isEmpty()) return result;
+		}
 		
 		return ItemStack.EMPTY;
 	}
@@ -160,22 +153,22 @@ public class RecipeCutMicroblock
 	}
 	
 	public static class SimpleSerializer
-			implements RecipeSerializer<RecipeCutMicroblock>
+			implements RecipeSerializer<RecipeFuseMicroblock>
 	{
 		@Override
-		public RecipeCutMicroblock fromJson(ResourceLocation id, JsonObject p_44104_)
+		public RecipeFuseMicroblock fromJson(ResourceLocation id, JsonObject p_44104_)
 		{
-			return new RecipeCutMicroblock(id);
+			return new RecipeFuseMicroblock(id);
 		}
 		
 		@Override
-		public @Nullable RecipeCutMicroblock fromNetwork(ResourceLocation id, FriendlyByteBuf buf)
+		public @Nullable RecipeFuseMicroblock fromNetwork(ResourceLocation id, FriendlyByteBuf buf)
 		{
-			return new RecipeCutMicroblock(id);
+			return new RecipeFuseMicroblock(id);
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buf, RecipeCutMicroblock recipe)
+		public void toNetwork(FriendlyByteBuf buf, RecipeFuseMicroblock recipe)
 		{
 		}
 	}

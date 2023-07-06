@@ -152,15 +152,17 @@ public class MicroblockPartDefinition
 			public boolean getQuads(PartEntity part, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType, Consumer<BakedQuad> addQuad)
 			{
 				if(!(part instanceof MicroblockEntity mb)) return true;
-				if(side == null) return true;
+				if(side != null) return true;
 				
 				var ctr = part.container();
 				var state = mb.state;
 				
 				if(!state.isValid()) return true;
 				
+				var rng = RandomSource.create(ctr.pos().asLong());
+				
 				var strips = state.getType().getModelStrips(mb.placement());
-				ModelGeneratorSystem.generateMesh(state.getType(), mb.placement(), ctr, ctr.level(), ctr.pos(), strips, state.asBlockState(), side, rand, renderType)
+				ModelGeneratorSystem.generateMesh(state.getType(), mb.placement(), ctr, ctr.level(), ctr.pos(), strips, state.asBlockState(), rng, renderType)
 						.toBakedBlockQuads()
 						.forEach(addQuad);
 				

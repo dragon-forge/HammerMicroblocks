@@ -3,8 +3,9 @@ package org.zeith.multipart.microblocks.init;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import org.zeith.hammerlib.annotations.Setup;
+import org.zeith.hammerlib.core.adapter.TagAdapter;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 
 public class TagsHM
@@ -14,6 +15,8 @@ public class TagsHM
 	{
 		TagsHM.Items.init();
 		TagsHM.Blocks.init();
+		
+		TagAdapter.bind(Blocks.MICROBLOCK_BLOCKLIST, net.minecraft.world.level.block.Blocks.REDSTONE_LAMP);
 	}
 	
 	public static class Blocks
@@ -23,7 +26,8 @@ public class TagsHM
 		}
 		
 		public static final TagKey<Block> MINEABLE_WITH_SAW = create("mineable/saw");
-		public static final TagKey<Block> MICROBLOCK_WHITELIST = modTag("microblock_whitelist");
+		public static final TagKey<Block> MICROBLOCK_ALLOWLIST = modTag("microblock_allowlist");
+		public static final TagKey<Block> MICROBLOCK_BLOCKLIST = modTag("microblock_blocklist");
 		
 		private static TagKey<Block> create(String name)
 		{

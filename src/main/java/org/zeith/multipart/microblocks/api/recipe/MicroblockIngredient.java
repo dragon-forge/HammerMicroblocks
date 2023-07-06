@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 public final class MicroblockIngredient
 {
+	public static final MicroblockIngredient EMPTY = of();
 	public static final MicroblockIngredient FULL_BLOCK = new MicroblockIngredient(f -> false, true);
 	
 	private final boolean isFullBlock;
@@ -25,6 +26,10 @@ public final class MicroblockIngredient
 	
 	public static MicroblockIngredient of(MicroblockType... types)
 	{
+		// An empty instance was already allocated
+		if(types.length == 0 && EMPTY != null)
+			return EMPTY;
+		
 		var tlst = List.of(types);
 		return new MicroblockIngredient(tlst::contains, false);
 	}
@@ -41,6 +46,9 @@ public final class MicroblockIngredient
 	
 	public boolean test(MicroblockedStack stack)
 	{
+		if(stack == null)
+			return this == EMPTY;
+		
 		return (isFullBlock && stack.fullBlock()) ||
 				(
 						!isFullBlock

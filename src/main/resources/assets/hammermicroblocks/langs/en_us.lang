@@ -5,13 +5,22 @@ microblock_type.hammermicroblocks.anti_cover=Anti-Cover
 microblock_type.hammermicroblocks.triple_panel=Triple Panel
 microblock_type.hammermicroblocks.slab=Slab
 microblock_type.hammermicroblocks.triple_cover=Triple Cover
+microblock_type.hammermicroblocks.hollow_triple_cover=Hollow Triple Cover
 microblock_type.hammermicroblocks.panel=Panel
+microblock_type.hammermicroblocks.hollow_panel=Hollow Panel
 microblock_type.hammermicroblocks.cover=Cover
+microblock_type.hammermicroblocks.hollow_cover=Hollow Cover
 microblock_type.hammermicroblocks.pillar=Pillar
 
 item.hammermicroblocks.microblock=Microblock
 item.hammermicroblocks.microblock_formatted=%s (%s)
 
+item.hammermicroblocks.gold_saw=Gold Saw
+item.hammermicroblocks.granite_saw=Granite Saw
 item.hammermicroblocks.iron_saw=Iron Saw
 item.hammermicroblocks.diamond_saw=Diamond Saw
 item.hammermicroblocks.netherite_saw=Netherite Saw
+
+jei.hammermicroblocks.saw_info=Saws can be used to cut blocks into smaller pieces. The cutting may only be performed on blocks that can be mined by
+jei.hammermicroblocks.microblock_cutting=Microblock Cutting
+jei.hammermicroblocks.microblock_combination=Microblock Combination

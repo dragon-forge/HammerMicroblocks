@@ -12,34 +12,39 @@ import java.util.List;
 public class PlanarMicroblockType
 		extends MicroblockType
 {
-	public final AABB[] boxes;
-	public final VoxelShape[] shapes;
+	protected final List<List<AABB>> boxes;
+	protected final List<VoxelShape> shapes;
 	public final double thickness;
 	
-	public boolean compatibleWithSameTypeEdged = false;
+	public boolean compatibleWithSameTypeEdged;
 	
 	public PlanarMicroblockType(float thickness, boolean compatibleWithSameTypeEdged)
 	{
 		this.thickness = thickness / 16D;
 		this.compatibleWithSameTypeEdged = compatibleWithSameTypeEdged;
 		
-		boxes = new AABB[] {
-				new AABB(0.0, 0.0, 0.0, 1.0, this.thickness, 1.0),
-				new AABB(0.0, 1.0 - this.thickness, 0.0, 1.0, 1.0, 1.0),
-				new AABB(0.0, 0.0, 0.0, 1.0, 1.0, this.thickness),
-				new AABB(0.0, 0.0, 1.0 - this.thickness, 1.0, 1.0, 1.0),
-				new AABB(0.0, 0.0, 0.0, this.thickness, 1.0, 1.0),
-				new AABB(1.0 - this.thickness, 0.0, 0.0, 1.0, 1.0, 1.0)
-		};
-		
-		shapes = new VoxelShape[] {
+		boxes = createAABBs();
+		shapes = createShapes();
+	}
+	
+	protected List<VoxelShape> createShapes()
+	{
+		return List.of(
 				Shapes.box(0.0, 0.0, 0.0, 1.0, this.thickness, 1.0),
 				Shapes.box(0.0, 1.0 - this.thickness, 0.0, 1.0, 1.0, 1.0),
 				Shapes.box(0.0, 0.0, 0.0, 1.0, 1.0, this.thickness),
 				Shapes.box(0.0, 0.0, 1.0 - this.thickness, 1.0, 1.0, 1.0),
 				Shapes.box(0.0, 0.0, 0.0, this.thickness, 1.0, 1.0),
 				Shapes.box(1.0 - this.thickness, 0.0, 0.0, 1.0, 1.0, 1.0)
-		};
+		);
+	}
+	
+	protected List<List<AABB>> createAABBs()
+	{
+		return createShapes()
+				.stream()
+				.map(VoxelShape::toAabbs)
+				.toList();
 	}
 	
 	@Override
@@ -51,7 +56,7 @@ public class PlanarMicroblockType
 	@Override
 	public VoxelShape getOccupationShapeFor(PartPlacement ourPlacement, MicroblockType futureType, PartPlacement futureTypePlacement, MicroblockEntity futureEntity)
 	{
-		if(futureType == this && compatibleWithSameTypeEdged)
+		if(futureType instanceof PlanarMicroblockType other && other.thickness == thickness && compatibleWithSameTypeEdged)
 			return Shapes.empty();
 		
 		return super.getOccupationShapeFor(ourPlacement, futureType, futureTypePlacement, futureEntity);
@@ -62,7 +67,7 @@ public class PlanarMicroblockType
 	{
 		var dir = placement.getDirection();
 		if(dir == null) return List.of();
-		return List.of(boxes[dir.ordinal()]);
+		return boxes.get(dir.ordinal());
 	}
 	
 	@Override
@@ -70,6 +75,6 @@ public class PlanarMicroblockType
 	{
 		var dir = placement.getDirection();
 		if(dir == null) return Shapes.empty();
-		return shapes[dir.ordinal()];
+		return shapes.get(dir.ordinal());
 	}
 }

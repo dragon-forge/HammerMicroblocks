@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class MicroblockPlacementGrid
 {
 	@Nullable
-	public abstract PartPlacement pickPlacement(Player player, BlockHitResult hit);
+	public abstract PartPlacement pickPlacement(Player player, BlockHitResult hit, boolean sameBlock);
 	
 	@NotNull
 	public abstract List<Vector3f> getLinesForRendering(Player player, VoxelShape blockBounds, BlockHitResult hit);

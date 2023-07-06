@@ -1,0 +1,6 @@
+{
+	"parent": "hammermicroblocks:item/base_saw",
+	"textures": {
+		"texture": "hammermicroblocks:item/granite_saw"
+	}
+}

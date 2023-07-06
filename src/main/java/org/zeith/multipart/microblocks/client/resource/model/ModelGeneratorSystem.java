@@ -97,7 +97,7 @@ public class ModelGeneratorSystem
 		return meshBuilder.build();
 	}
 	
-	public static Mesh generateMesh(MicroblockType type, PartPlacement placement, PartContainer pc, BlockAndTintGetter parentWorld, BlockPos pos, List<AABB> holeStrips, BlockState blockState, Direction side, RandomSource random, RenderType renderType)
+	public static Mesh generateMesh(MicroblockType type, PartPlacement placement, PartContainer pc, BlockAndTintGetter parentWorld, BlockPos pos, List<AABB> holeStrips, BlockState blockState, RandomSource random, RenderType renderType)
 	{
 		BlockColors blockColors = Minecraft.getInstance().getBlockColors();
 		
@@ -112,28 +112,26 @@ public class ModelGeneratorSystem
 		{
 			planarThickness = (float) pl.thickness;
 			planarAttachment = placement.getDirection();
-			
-			for(Direction dir : Direction.values())
-			{
-				if(dir.getAxis() != side.getAxis())
+			if(planarAttachment != null)
+				for(Direction dir : Direction.values())
 				{
-					var part = pc.getPartAt(PartPlacementsHM.SIDED_PLACEMENT.apply(dir));
-					if(part instanceof MicroblockEntity mb && mb.state.getType() instanceof PlanarMicroblockType)
-						facadeMask |= 1 << dir.ordinal();
+					if(dir.getAxis() != planarAttachment.getAxis())
+					{
+						var part = pc.getPartAt(PartPlacementsHM.SIDED_PLACEMENT.apply(dir));
+						if(part instanceof MicroblockEntity mb && mb.state.getType() instanceof PlanarMicroblockType)
+							facadeMask |= 1 << dir.ordinal();
+					}
 				}
-			}
 		}
 		
-		var facadeAccess = new FacadeBlockAccess(parentWorld, pos,
-				planarAttachment != null ? planarAttachment : side, blockState
-		);
+		var facadeAccess = new FacadeBlockAccess(parentWorld, pos, blockState);
 		
 		var dispatcher = Minecraft.getInstance().getBlockRenderer();
 		var model = dispatcher.getBlockModel(blockState);
 		
 		var fullBounds = type.getShape(placement).bounds();
-		
-		QuadFaceStripper faceStripper = new QuadFaceStripper(fullBounds, facadeMask);
+
+//		QuadFaceStripper faceStripper = new QuadFaceStripper(fullBounds, facadeMask);
 		
 		// Setup the kicker.
 		QuadCornerKicker kicker = new QuadCornerKicker();
@@ -161,17 +159,35 @@ public class ModelGeneratorSystem
 				
 				// Prebake the color tint into the quad
 				if(quad.getTintIndex() != -1)
-				{
-					quadTinter = new QuadTinter(
-							blockColors.getColor(blockState, facadeAccess, pos, quad.getTintIndex()));
-				}
+					quadTinter = new QuadTinter(blockColors.getColor(blockState, facadeAccess, pos, quad.getTintIndex()));
 				
 				for(AABB box : holeStrips)
 				{
+					if(quad.getDirection() != null && (facadeMask & 1 << quad.getDirection().ordinal()) != 0)
+					{
+						double axial = switch(quad.getDirection())
+						{
+							case DOWN -> box.minY;
+							case UP -> box.maxY;
+							case NORTH -> box.minZ;
+							case SOUTH -> box.maxZ;
+							case WEST -> box.minX;
+							case EAST -> box.maxX;
+							default -> -1;
+						};
+						
+						double desired =
+								quad.getDirection().getAxisDirection() == Direction.AxisDirection.NEGATIVE ? 0 : 1;
+						
+						if(Math.abs(axial - desired) < 0.001)
+							continue;
+					}
+					
 					emitter.fromVanilla(quad.getVertices(), 0, false);
 					// Keep the cull-face for faces that are flush with the outer block-face on the
 					// side the facade is attached to, but clear it for anything that faces inwards
 					emitter.cullFace(cullFace == planarAttachment ? planarAttachment : null);
+					
 					emitter.nominalFace(quad.getDirection());
 					interpolator.setInputQuad(emitter);
 					
@@ -180,8 +196,8 @@ public class ModelGeneratorSystem
 						continue;
 					
 					// Strips faces if they match a mask.
-					if(!faceStripper.transform(emitter))
-						continue;
+//					if(!faceStripper.transform(emitter))
+//						continue;
 					
 					// Kicks the edge inner corners in, solves Z fighting
 					if(planarAttachment != null && !kicker.transform(emitter))
@@ -284,14 +300,12 @@ public class ModelGeneratorSystem
 	{
 		private final BlockAndTintGetter level;
 		private final BlockPos pos;
-		private final Direction side;
 		private final BlockState state;
 		
-		public FacadeBlockAccess(BlockAndTintGetter level, BlockPos pos, Direction side, BlockState state)
+		public FacadeBlockAccess(BlockAndTintGetter level, BlockPos pos, BlockState state)
 		{
 			this.level = level;
 			this.pos = pos;
-			this.side = side;
 			this.state = state;
 		}
 		
