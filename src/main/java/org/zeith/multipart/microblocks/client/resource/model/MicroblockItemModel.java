@@ -149,7 +149,7 @@ public class MicroblockItemModel
 			if(side != null) return Collections.emptyList();
 			if(quads == null)
 			{
-				var aabbs = type.getModelStrips(type.getPlacementForRendering());
+				var aabbs = type.getModelStrips(type.getPlacementForRendering(), type.createItemData());
 				quads = ModelGeneratorSystem.generateMesh(aabbs, blockState, Direction.NORTH).toBakedBlockQuads();
 				quads = Collections.unmodifiableList(quads);
 			}

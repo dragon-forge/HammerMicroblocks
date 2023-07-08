@@ -11,7 +11,7 @@ import net.minecraft.world.item.*;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.recipe.*;
 import org.zeith.multipart.microblocks.init.ItemsHM;
-import org.zeith.multipart.microblocks.items.ItemSaw;
+import org.zeith.multipart.microblocks.contents.items.ItemSaw;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package org.zeith.multipart.microblocks.multipart.entity;
+package org.zeith.multipart.microblocks.contents.multipart.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,14 +53,14 @@ public class MicroblockEntity
 	@Override
 	protected VoxelShape updateShape()
 	{
-		return state.getType().getShape(placement);
+		return state.getType().getShape(placement, state.getData());
 	}
 	
 	@Override
 	public VoxelShape getPartOccupiedShapeWith(PartEntity toBePlaced, VoxelShape shapeOfEntity)
 	{
 		if(toBePlaced instanceof MicroblockEntity mbe)
-			return state.getType().getOccupationShapeFor(placement, mbe.state.getType(), mbe.placement(), mbe);
+			return state.getType().getOccupationShapeFor(placement, mbe.state.getType(), mbe.placement(), mbe, state.getData());
 		return getShape();
 	}
 	

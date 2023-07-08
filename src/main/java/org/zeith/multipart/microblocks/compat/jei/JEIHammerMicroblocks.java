@@ -1,18 +1,16 @@
 package org.zeith.multipart.microblocks.compat.jei;
 
 import mezz.jei.api.*;
-import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
-import net.minecraft.client.gui.screens.inventory.CraftingScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.recipe.*;
 import org.zeith.multipart.microblocks.api.recipe.combination.*;
+import org.zeith.multipart.microblocks.contents.items.ItemSaw;
 import org.zeith.multipart.microblocks.init.ItemsHM;
-import org.zeith.multipart.microblocks.items.ItemSaw;
 
 @JeiPlugin
 public class JEIHammerMicroblocks

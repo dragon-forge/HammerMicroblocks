@@ -1,11 +1,12 @@
-package org.zeith.multipart.microblocks.impl;
+package org.zeith.multipart.microblocks.contents.microblocks;
 
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import org.zeith.multipart.api.placement.PartPlacement;
-import org.zeith.multipart.microblocks.api.MicroblockType;
+import org.zeith.multipart.microblocks.api.*;
 import org.zeith.multipart.microblocks.api.grids.*;
-import org.zeith.multipart.microblocks.multipart.entity.MicroblockEntity;
+import org.zeith.multipart.microblocks.contents.multipart.entity.MicroblockEntity;
 
 import java.util.List;
 
@@ -54,16 +55,17 @@ public class PlanarMicroblockType
 	}
 	
 	@Override
-	public VoxelShape getOccupationShapeFor(PartPlacement ourPlacement, MicroblockType futureType, PartPlacement futureTypePlacement, MicroblockEntity futureEntity)
+	public VoxelShape getOccupationShapeFor(PartPlacement ourPlacement, MicroblockType futureType, PartPlacement futureTypePlacement, MicroblockEntity futureEntity, @Nullable MicroblockData data)
 	{
-		if(futureType instanceof PlanarMicroblockType other && other.thickness == thickness && compatibleWithSameTypeEdged)
+		if(futureType instanceof PlanarMicroblockType other && other.thickness == thickness &&
+				compatibleWithSameTypeEdged)
 			return Shapes.empty();
 		
-		return super.getOccupationShapeFor(ourPlacement, futureType, futureTypePlacement, futureEntity);
+		return super.getOccupationShapeFor(ourPlacement, futureType, futureTypePlacement, futureEntity, data);
 	}
 	
 	@Override
-	public List<AABB> getModelStrips(PartPlacement placement)
+	public List<AABB> getModelStrips(PartPlacement placement, @Nullable MicroblockData data)
 	{
 		var dir = placement.getDirection();
 		if(dir == null) return List.of();
@@ -71,7 +73,7 @@ public class PlanarMicroblockType
 	}
 	
 	@Override
-	public VoxelShape getShape(PartPlacement placement)
+	public VoxelShape getShape(PartPlacement placement, @Nullable MicroblockData data)
 	{
 		var dir = placement.getDirection();
 		if(dir == null) return Shapes.empty();

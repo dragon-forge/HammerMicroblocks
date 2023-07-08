@@ -19,7 +19,7 @@ import org.zeith.multipart.blocks.BlockMultipartContainer;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
 import org.zeith.multipart.microblocks.client.resource.model.ModelGeneratorSystem;
 import org.zeith.multipart.microblocks.init.*;
-import org.zeith.multipart.microblocks.multipart.MicroblockPartDefinition;
+import org.zeith.multipart.microblocks.contents.multipart.MicroblockPartDefinition;
 
 import java.util.stream.Collectors;
 
@@ -94,6 +94,7 @@ public class RenderPartPlacement
 		}
 		
 		var placement = grid.pickPlacement(pl, hit, pos.equals(hit.getBlockPos()));
+		var data = type.createDataForPlacement(pl, hit, pos.equals(hit.getBlockPos()));
 		
 		if(placement != null)
 		{
@@ -130,7 +131,7 @@ public class RenderPartPlacement
 				
 				MicroblockPartDefinition.MicroblockConfiguration config = new MicroblockPartDefinition.MicroblockConfiguration(
 						new MicroblockState()
-								.setType(type)
+								.setType(type, data)
 								.setMaterial(microblockStack)
 				);
 				
@@ -192,16 +193,20 @@ public class RenderPartPlacement
 			var finalPos = shift ? pos.relative(hitDir) : pos;
 			
 			var pl0 = grid.pickPlacement(pl, hit, finalPos.equals(hit.getBlockPos()));
+			var d0 = type.createDataForPlacement(pl, hit, finalPos.equals(hit.getBlockPos()));
 			if(pl0 != null)
+			{
 				placement = pl0;
+				data = d0;
+			}
 			
-			var strips = type.getModelStrips(placement);
+			var strips = type.getModelStrips(placement, data);
 			
 			pc = BlockMultipartContainer.pc(mc.level, finalPos);
 			
 			var rng = RandomSource.create(pos.asLong());
 			for(RenderType layer : RenderType.chunkBufferLayers())
-				for(BakedQuad quad : ModelGeneratorSystem.generateMesh(type, placement, pc, mc.level, finalPos, strips, microstate, rng, layer)
+				for(BakedQuad quad : ModelGeneratorSystem.generateMesh(type, placement, data, pc, mc.level, finalPos, strips, microstate, rng, layer)
 						.toBakedBlockQuads())
 					buf.putBulkData(last, quad, 1, 1, 1, 0.6F, 255, 0, true);
 		}

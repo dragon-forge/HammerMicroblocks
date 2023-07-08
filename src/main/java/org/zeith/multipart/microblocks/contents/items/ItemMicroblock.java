@@ -1,9 +1,10 @@
-package org.zeith.multipart.microblocks.items;
+package org.zeith.multipart.microblocks.contents.items;
 
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -21,7 +22,7 @@ import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
 import org.zeith.multipart.microblocks.init.*;
-import org.zeith.multipart.microblocks.multipart.MicroblockPartDefinition;
+import org.zeith.multipart.microblocks.contents.multipart.MicroblockPartDefinition;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ public class ItemMicroblock
 	{
 		lst.add(Blocks.STONE);
 		lst.add(Blocks.DIRT);
+		lst.add(Blocks.GRASS_BLOCK);
 		
 		lst.add(Blocks.OAK_PLANKS);
 		lst.add(Blocks.SPRUCE_PLANKS);
@@ -50,6 +52,42 @@ public class ItemMicroblock
 		lst.add(Blocks.IRON_BLOCK);
 		lst.add(Blocks.GOLD_BLOCK);
 		lst.add(Blocks.DIAMOND_BLOCK);
+		lst.add(Blocks.EMERALD_BLOCK);
+		lst.add(Blocks.LAPIS_BLOCK);
+		
+		lst.add(Blocks.WHITE_WOOL);
+		lst.add(Blocks.ORANGE_WOOL);
+		lst.add(Blocks.MAGENTA_WOOL);
+		lst.add(Blocks.LIGHT_BLUE_WOOL);
+		lst.add(Blocks.YELLOW_WOOL);
+		lst.add(Blocks.LIME_WOOL);
+		lst.add(Blocks.PINK_WOOL);
+		lst.add(Blocks.GRAY_WOOL);
+		lst.add(Blocks.LIGHT_GRAY_WOOL);
+		lst.add(Blocks.CYAN_WOOL);
+		lst.add(Blocks.PURPLE_WOOL);
+		lst.add(Blocks.BLUE_WOOL);
+		lst.add(Blocks.BROWN_WOOL);
+		lst.add(Blocks.GREEN_WOOL);
+		lst.add(Blocks.RED_WOOL);
+		lst.add(Blocks.BLACK_WOOL);
+		
+		lst.add(Blocks.WHITE_CONCRETE);
+		lst.add(Blocks.ORANGE_CONCRETE);
+		lst.add(Blocks.MAGENTA_CONCRETE);
+		lst.add(Blocks.LIGHT_BLUE_CONCRETE);
+		lst.add(Blocks.YELLOW_CONCRETE);
+		lst.add(Blocks.LIME_CONCRETE);
+		lst.add(Blocks.PINK_CONCRETE);
+		lst.add(Blocks.GRAY_CONCRETE);
+		lst.add(Blocks.LIGHT_GRAY_CONCRETE);
+		lst.add(Blocks.CYAN_CONCRETE);
+		lst.add(Blocks.PURPLE_CONCRETE);
+		lst.add(Blocks.BLUE_CONCRETE);
+		lst.add(Blocks.BROWN_CONCRETE);
+		lst.add(Blocks.GREEN_CONCRETE);
+		lst.add(Blocks.RED_CONCRETE);
+		lst.add(Blocks.BLACK_CONCRETE);
 		
 		lst.add(Blocks.OBSIDIAN);
 		
@@ -71,17 +109,17 @@ public class ItemMicroblock
 	public Optional<PlacedPartConfiguration> getPlacement(Level level, BlockPos pos, Player player, ItemStack stack, BlockHitResult hit)
 	{
 		var state = new MicroblockState();
-		PartPlacement placement = null;
+		PartPlacement placement;
 		
 		var mbt = getMicroblockType(stack);
 		var mat = getMicroblockMaterialStack(stack);
 		
 		if(mbt == null || mat.isEmpty()) return Optional.empty();
 		
-		state.setType(mbt)
-				.setMaterial(mat);
-		
 		placement = mbt.getPlacementGrid().pickPlacement(player, hit, pos.equals(hit.getBlockPos()));
+		var data = mbt.createDataForPlacement(player, hit, pos.equals(hit.getBlockPos()));
+		state.setType(mbt, data)
+				.setMaterial(mat);
 		
 		if(placement != null && state.isValid())
 			return Optional.of(new PlacedPartConfiguration(PartDefinitionsHM.MICROBLOCK, new MicroblockPartDefinition.MicroblockConfiguration(state), placement));
@@ -94,20 +132,20 @@ public class ItemMicroblock
 		{
 			var ae2Facades = new ResourceLocation("ae2", "whitelisted/facades");
 			
-			e.addAllToTag(TagsHM.Blocks.MICROBLOCK_ALLOWLIST,
-					ForgeRegistries.BLOCKS.getValues()
-							.stream()
-							.map(Block::defaultBlockState)
-							.filter(this::allowStateAsFacade)
-							.map(BlockState::getBlock)
-							.toList()
-			);
+			var entries = e.tags.getOrDefault(TagsHM.Blocks.MICROBLOCK_BLOCKLIST.location(), List.of())
+					.stream()
+					.map(TagLoader.EntryWithSource::entry)
+					.filter(t -> !t.isTag())
+					.map(TagEntry::getId)
+					.toList();
 			
 			var forced = e.tags.computeIfAbsent(TagsHM.Blocks.MICROBLOCK_ALLOWLIST.location(), l -> new ArrayList<>());
 			var vals = e.tags.get(ae2Facades);
 			if(vals != null && !vals.isEmpty())
 			{
-				forced.addAll(vals);
+				for(TagLoader.EntryWithSource val : vals)
+					if(val.entry().isTag() || !entries.contains(val.entry().getId()))
+						forced.addAll(vals);
 				
 				HammerMicroblocks.LOG.info("Added " + e.tags.get(ae2Facades).size() +
 						" AE2 facade whitelisted blocks to our own microblock whitelist.");
@@ -177,7 +215,7 @@ public class ItemMicroblock
 		// We only support the default state for microblocks. Sorry.
 		var blockState = block.defaultBlockState();
 		
-		if(allowStateAsFacade(blockState))
+		if(allowStateAsFacade(blockState, true))
 		{
 			if(returnItem) return itemStack;
 			return forItemRaw(type, itemStack, size);
@@ -206,9 +244,9 @@ public class ItemMicroblock
 		return false;
 	}
 	
-	public boolean allowStateAsFacade(BlockState blockState)
+	public boolean allowStateAsFacade(BlockState blockState, boolean checkBlocklist)
 	{
-		if(blockState.is(TagsHM.Blocks.MICROBLOCK_BLOCKLIST))
+		if(checkBlocklist && blockState.is(TagsHM.Blocks.MICROBLOCK_BLOCKLIST))
 			return false;
 		
 		var forcedByTag = blockState.is(TagsHM.Blocks.MICROBLOCK_ALLOWLIST);
@@ -247,7 +285,7 @@ public class ItemMicroblock
 		for(var b : LIMITED_TAB_SELECTION)
 			try
 			{
-				if(!allowStateAsFacade(b.defaultBlockState()))
+				if(!allowStateAsFacade(b.defaultBlockState(), true))
 					continue;
 				var item = b.asItem();
 				if(item != Items.AIR)

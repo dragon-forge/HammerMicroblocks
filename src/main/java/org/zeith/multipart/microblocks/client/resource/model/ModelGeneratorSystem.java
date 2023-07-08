@@ -19,9 +19,9 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.zeith.multipart.api.PartContainer;
 import org.zeith.multipart.api.placement.PartPlacement;
 import org.zeith.multipart.init.PartPlacementsHM;
-import org.zeith.multipart.microblocks.api.MicroblockType;
-import org.zeith.multipart.microblocks.impl.PlanarMicroblockType;
-import org.zeith.multipart.microblocks.multipart.entity.MicroblockEntity;
+import org.zeith.multipart.microblocks.api.*;
+import org.zeith.multipart.microblocks.contents.microblocks.PlanarMicroblockType;
+import org.zeith.multipart.microblocks.contents.multipart.entity.MicroblockEntity;
 import org.zeith.multipart.microblocks.shadow.codechicken.lib.model.pipeline.transformers.*;
 import org.zeith.multipart.microblocks.shadow.fabric.*;
 
@@ -97,7 +97,7 @@ public class ModelGeneratorSystem
 		return meshBuilder.build();
 	}
 	
-	public static Mesh generateMesh(MicroblockType type, PartPlacement placement, PartContainer pc, BlockAndTintGetter parentWorld, BlockPos pos, List<AABB> holeStrips, BlockState blockState, RandomSource random, RenderType renderType)
+	public static Mesh generateMesh(MicroblockType type, PartPlacement placement, MicroblockData data, PartContainer pc, BlockAndTintGetter parentWorld, BlockPos pos, List<AABB> holeStrips, BlockState blockState, RandomSource random, RenderType renderType)
 	{
 		BlockColors blockColors = Minecraft.getInstance().getBlockColors();
 		
@@ -129,7 +129,7 @@ public class ModelGeneratorSystem
 		var dispatcher = Minecraft.getInstance().getBlockRenderer();
 		var model = dispatcher.getBlockModel(blockState);
 		
-		var fullBounds = type.getShape(placement).bounds();
+		var fullBounds = type.getShape(placement, data).bounds();
 
 //		QuadFaceStripper faceStripper = new QuadFaceStripper(fullBounds, facadeMask);
 		

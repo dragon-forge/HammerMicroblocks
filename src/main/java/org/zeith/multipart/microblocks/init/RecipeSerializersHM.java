@@ -2,7 +2,7 @@ package org.zeith.multipart.microblocks.init;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.zeith.hammerlib.annotations.*;
-import org.zeith.multipart.microblocks.recipes.*;
+import org.zeith.multipart.microblocks.contents.recipes.*;
 
 @SimplyRegister
 public interface RecipeSerializersHM

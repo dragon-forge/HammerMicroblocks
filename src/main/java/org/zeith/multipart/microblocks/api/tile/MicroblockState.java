@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
-import org.zeith.multipart.microblocks.api.MicroblockType;
+import org.zeith.multipart.microblocks.api.*;
 import org.zeith.multipart.microblocks.init.ItemsHM;
 
 import java.util.Objects;
@@ -17,6 +17,7 @@ public class MicroblockState
 		implements INBTSerializable<CompoundTag>
 {
 	protected MicroblockType type;
+	protected MicroblockData data;
 	protected Item material = Items.AIR;
 	
 	public MicroblockState()
@@ -33,9 +34,15 @@ public class MicroblockState
 		return type;
 	}
 	
-	public MicroblockState setType(MicroblockType type)
+	public MicroblockData getData()
+	{
+		return data;
+	}
+	
+	public MicroblockState setType(MicroblockType type, MicroblockData data)
 	{
 		this.type = type;
+		this.data = data;
 		return this;
 	}
 	
@@ -48,6 +55,7 @@ public class MicroblockState
 	public void copyFrom(MicroblockState state)
 	{
 		this.type = state.type;
+		this.data = state.data;
 		this.material = state.material;
 	}
 	
@@ -67,6 +75,7 @@ public class MicroblockState
 	{
 		var tag = new CompoundTag();
 		tag.putString("Type", Objects.toString(HammerMicroblocks.microblockTypes().getKey(type)));
+		if(this.data != null) tag.put("Data", this.data.serializeNBT());
 		tag.putString("Id", Objects.toString(ForgeRegistries.ITEMS.getKey(material)));
 		return tag;
 	}
@@ -75,6 +84,11 @@ public class MicroblockState
 	public void deserializeNBT(CompoundTag tag)
 	{
 		this.type = HammerMicroblocks.microblockTypes().getValue(ResourceLocation.tryParse(tag.getString("Type")));
+		if(this.type != null)
+		{
+			this.data = this.type.createEmptyData();
+			if(this.data != null) this.data.deserializeNBT(tag.getCompound("Data"));
+		}
 		this.material = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(tag.getString("Id")));
 	}
 }

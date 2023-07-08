@@ -1,4 +1,4 @@
-package org.zeith.multipart.microblocks.recipes;
+package org.zeith.multipart.microblocks.contents.recipes;
 
 import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.api.recipe.MicroblockedStack;
 import org.zeith.multipart.microblocks.api.recipe.combination.*;
+import org.zeith.multipart.microblocks.contents.items.ItemMicroblock;
 import org.zeith.multipart.microblocks.init.*;
-import org.zeith.multipart.microblocks.items.*;
 
 import java.util.*;
 

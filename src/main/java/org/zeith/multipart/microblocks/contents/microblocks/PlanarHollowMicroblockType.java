@@ -1,4 +1,4 @@
-package org.zeith.multipart.microblocks.impl;
+package org.zeith.multipart.microblocks.contents.microblocks;
 
 import net.minecraft.world.phys.shapes.*;
 

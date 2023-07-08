@@ -1,7 +1,7 @@
 package org.zeith.multipart.microblocks.init;
 
 import org.zeith.hammerlib.annotations.*;
-import org.zeith.multipart.microblocks.impl.*;
+import org.zeith.multipart.microblocks.contents.microblocks.*;
 
 @SimplyRegister
 public interface MicroblockTypesHM
@@ -30,6 +30,23 @@ public interface MicroblockTypesHM
 	@RegistryName("hollow_cover")
 	PlanarHollowMicroblockType HOLLOW_COVER = new PlanarHollowMicroblockType(2, true);
 
-//	@RegistryName("pillar")
-//	MicroblockType PILLAR = new MicroblockType();
+	// Pillars
+	
+	@RegistryName("anticover_pillar")
+	PillarMicroblockType ANTICOVER_PILLAR = new PillarMicroblockType(14F);
+	
+	@RegistryName("triple_panel_pillar")
+	PillarMicroblockType TRIPLE_PANEL_PILLAR = new PillarMicroblockType(12F);
+	
+	@RegistryName("slab_pillar")
+	PillarMicroblockType SLAB_PILLAR = new PillarMicroblockType(8F);
+	
+	@RegistryName("triple_cover_pillar")
+	PillarMicroblockType TRIPLE_COVER_PILLAR = new PillarMicroblockType(6F);
+	
+	@RegistryName("panel_pillar")
+	PillarMicroblockType PANEL_PILLAR = new PillarMicroblockType(4F);
+	
+	@RegistryName("cover_pillar")
+	PillarMicroblockType COVER_PILLAR = new PillarMicroblockType(2F);
 }

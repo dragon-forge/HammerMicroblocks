@@ -16,7 +16,7 @@ import org.zeith.hammerlib.util.java.tuples.Tuples;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.recipe.*;
 import org.zeith.multipart.microblocks.api.recipe.combination.*;
-import org.zeith.multipart.microblocks.recipes.*;
+import org.zeith.multipart.microblocks.contents.recipes.*;
 
 import java.util.List;
 
@@ -121,6 +121,38 @@ public class RecipesHM
 				MicroblockTypesHM.PANEL,
 				3
 		));
+		
+		// Pillars
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.SLAB))),
+				MicroblockTypesHM.SLAB_PILLAR,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.PANEL))),
+				MicroblockTypesHM.PANEL_PILLAR,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.COVER))),
+				MicroblockTypesHM.COVER_PILLAR,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL))),
+				MicroblockTypesHM.TRIPLE_PANEL_PILLAR,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER))),
+				MicroblockTypesHM.TRIPLE_COVER_PILLAR,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.ANTI_COVER))),
+				MicroblockTypesHM.ANTICOVER_PILLAR,
+				2
+		));
 	}
 	
 	private static void addFusions(GatherMicroblockComboRecipesEvent e)
@@ -211,6 +243,32 @@ public class RecipesHM
 		e.add(new ShapelessMicroblockRecipe(
 				NonNullList.withSize(8, MicroblockIngredient.of(MicroblockTypesHM.COVER)),
 				null, true, 1
+		));
+		
+		// Pillars -> planars
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.COVER_PILLAR)),
+				MicroblockTypesHM.COVER, false, 1
+		));
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.PANEL_PILLAR)),
+				MicroblockTypesHM.PANEL, false, 1
+		));
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.SLAB_PILLAR)),
+				MicroblockTypesHM.SLAB, false, 1
+		));
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER_PILLAR)),
+				MicroblockTypesHM.TRIPLE_COVER, false, 1
+		));
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL_PILLAR)),
+				MicroblockTypesHM.TRIPLE_PANEL, false, 1
+		));
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.ANTICOVER_PILLAR)),
+				MicroblockTypesHM.ANTI_COVER, false, 1
 		));
 	}
 }
