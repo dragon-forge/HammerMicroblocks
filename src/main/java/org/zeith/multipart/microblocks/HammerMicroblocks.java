@@ -5,12 +5,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.*;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.*;
 import org.zeith.api.registry.RegistryMapping;
 import org.zeith.hammerlib.api.items.CreativeTab;
 import org.zeith.hammerlib.core.adapter.LanguageAdapter;
-import org.zeith.hammerlib.core.init.ItemsHL;
 import org.zeith.hammerlib.proxy.HLConstants;
+import org.zeith.hammerlib.util.CommonMessages;
 import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.init.ItemsHM;
 
@@ -37,6 +38,12 @@ public class HammerMicroblocks
 	
 	public HammerMicroblocks()
 	{
+		CommonMessages.printMessageOnIllegalRedistribution(HammerMicroblocks.class,
+				LogManager.getLogger(HammerMicroblocks.class),
+				"HammerMicroblocks",
+				"https://www.curseforge.com/minecraft/mc-mods/hammer-microblocks"
+		);
+		
 		var modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		LanguageAdapter.registerMod(MOD_ID);
