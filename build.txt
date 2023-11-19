@@ -1,5 +1,5 @@
 # Mod Info
-mod_version=20.1.4
+mod_version=20.1.5
 build_candidate=false
 
 # Mod dependencies (jei is not a requirement, but HammerLib is)
@@ -10,7 +10,7 @@ jei_version=15.2.0.22
 # Persistent mod info
 mod_id=hammermicroblocks
 archive_name=HammerMicroblocks
-mod_name=Hammer Microblocks
+mod_name=HammerMicroblocks
 mod_description=Adds smaller cut versions of various solid blocks for Hammer Multipart.
 mod_authors=Zeitheron
 mod_license=All Rights Reserved
