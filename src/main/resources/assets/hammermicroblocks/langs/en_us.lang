@@ -26,6 +26,6 @@ item.hammermicroblocks.iron_saw=Iron Saw
 item.hammermicroblocks.diamond_saw=Diamond Saw
 item.hammermicroblocks.netherite_saw=Netherite Saw
 
-jei.hammermicroblocks.saw_info=Saws can be used to cut blocks into smaller pieces. The cutting may only be performed on blocks that can be mined by
+jei.hammermicroblocks.saw_info=Saws can be used to cut blocks into smaller pieces. The cutting may only be performed on blocks that can be mined by this tier of material (ex. diamond saw can cut obsidian, while iron saw can not)
 jei.hammermicroblocks.microblock_cutting=Microblock Cutting
 jei.hammermicroblocks.microblock_combination=Microblock Combination
