@@ -1,5 +1,6 @@
 package org.zeith.multipart.microblocks.contents.recipes;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.TierSortingRegistry;
-import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.api.recipe.*;

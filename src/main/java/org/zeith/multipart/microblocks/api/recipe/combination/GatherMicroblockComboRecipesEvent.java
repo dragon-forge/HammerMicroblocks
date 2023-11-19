@@ -1,8 +1,8 @@
 package org.zeith.multipart.microblocks.api.recipe.combination;
 
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.function.Consumer;
