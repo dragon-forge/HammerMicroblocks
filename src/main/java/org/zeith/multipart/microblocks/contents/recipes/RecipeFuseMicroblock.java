@@ -149,7 +149,7 @@ public class RecipeFuseMicroblock
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return RecipeSerializersHM.MICROBLOCK_CUTTING_SERIALIZER;
+		return RecipeSerializersHM.MICROBLOCK_FUSION_SERIALIZER;
 	}
 	
 	public static class SimpleSerializer
