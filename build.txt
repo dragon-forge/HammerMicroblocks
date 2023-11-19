@@ -1,5 +1,5 @@
 # Mod Info
-mod_version=20.1.3
+mod_version=20.1.4
 build_candidate=false
 
 # Mod dependencies (jei is not a requirement, but HammerLib is)
@@ -15,7 +15,7 @@ mod_description=Adds smaller cut versions of various solid blocks for Hammer Mul
 mod_authors=Zeitheron
 mod_license=All Rights Reserved
 mod_credits=None
-issue_tracker_url=https://github.com/dragon-forge/HammerLib/issues
+issue_tracker_url=https://github.com/dragon-forge/HammerMicroblocks/issues
 
 # Maven Info
 maven_group=org.zeith.multipart
