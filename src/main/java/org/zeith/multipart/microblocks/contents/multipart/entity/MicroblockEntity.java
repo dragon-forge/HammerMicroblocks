@@ -89,6 +89,12 @@ public class MicroblockEntity
 		return state.asBlockState().getDestroySpeed(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
 	}
 	
+	@Override
+	public boolean isViewBlocking()
+	{
+		return state.asBlockState().isViewBlocking(container.level(), container.pos());
+	}
+	
 	public SoundType getSoundType()
 	{
 		return state.asBlockState().getSoundType();
