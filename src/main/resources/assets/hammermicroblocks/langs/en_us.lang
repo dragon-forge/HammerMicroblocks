@@ -2,10 +2,13 @@
 creative_tab.hammermicroblocks.parts=Hammer Microblocks
 
 microblock_type.hammermicroblocks.anti_cover=Anti-Cover
+microblock_type.hammermicroblocks.hollow_anti_cover=Hollow Anti-Cover
 microblock_type.hammermicroblocks.anticover_pillar=Anti-Cover Pillar
 microblock_type.hammermicroblocks.triple_panel=Triple Panel
+microblock_type.hammermicroblocks.hollow_triple_panel=Hollow Triple Panel
 microblock_type.hammermicroblocks.triple_panel_pillar=Triple Panel Pillar
 microblock_type.hammermicroblocks.slab=Slab
+microblock_type.hammermicroblocks.hollow_slab=Hollow Slab
 microblock_type.hammermicroblocks.slab_pillar=Slab Pillar
 microblock_type.hammermicroblocks.triple_cover=Triple Cover
 microblock_type.hammermicroblocks.triple_cover_pillar=Triple Cover Pillar
@@ -16,6 +19,8 @@ microblock_type.hammermicroblocks.hollow_panel=Hollow Panel
 microblock_type.hammermicroblocks.cover=Cover
 microblock_type.hammermicroblocks.cover_pillar=Cover Pillar
 microblock_type.hammermicroblocks.hollow_cover=Hollow Cover
+microblock_type.hammermicroblocks.facade=Facade
+microblock_type.hammermicroblocks.hollow_facade=Hollow Facade
 
 item.hammermicroblocks.microblock=Microblock
 item.hammermicroblocks.microblock_formatted=%s (%s)

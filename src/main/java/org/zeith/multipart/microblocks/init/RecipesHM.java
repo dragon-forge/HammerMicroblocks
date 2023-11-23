@@ -99,6 +99,12 @@ public class RecipesHM
 		));
 		
 		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.COVER))),
+				MicroblockTypesHM.FACADE,
+				2
+		));
+		
+		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_PANEL))),
 				MicroblockTypesHM.HOLLOW_COVER,
 				2
@@ -158,6 +164,17 @@ public class RecipesHM
 	private static void addFusions(GatherMicroblockComboRecipesEvent e)
 	{
 		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.HOLLOW_FACADE, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.FACADE))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.FACADE, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_FACADE))
+		));
+		
+		e.add(ShapedMicroblockRecipe.newRecipe(
 				MicroblockTypesHM.HOLLOW_COVER, false, 8,
 				new RecipeShape("ccc", "c c", "ccc"),
 				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.COVER))
@@ -178,6 +195,50 @@ public class RecipesHM
 				new RecipeShape("ccc", "c c", "ccc"),
 				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_PANEL))
 		));
+		
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.HOLLOW_TRIPLE_COVER, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.TRIPLE_COVER, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_TRIPLE_COVER))
+		));
+		
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.HOLLOW_SLAB, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.SLAB))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.SLAB, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_SLAB))
+		));
+		
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.HOLLOW_TRIPLE_PANEL, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.TRIPLE_PANEL, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_TRIPLE_PANEL))
+		));
+		
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.HOLLOW_ANTI_COVER, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.ANTI_COVER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.ANTI_COVER, false, 8,
+				new RecipeShape("ccc", "c c", "ccc"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_ANTI_COVER))
+		));
 	}
 	
 	private static void addFusionsLast(GatherMicroblockComboRecipesEvent e)
@@ -194,6 +255,48 @@ public class RecipesHM
 		e.add(new ShapelessMicroblockRecipe(
 				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_COVER)),
 				MicroblockTypesHM.HOLLOW_PANEL, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(3, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_COVER)),
+				MicroblockTypesHM.HOLLOW_TRIPLE_COVER, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(4, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_COVER)),
+				MicroblockTypesHM.HOLLOW_SLAB, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(6, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_COVER)),
+				MicroblockTypesHM.HOLLOW_TRIPLE_PANEL, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(7, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_COVER)),
+				MicroblockTypesHM.HOLLOW_ANTI_COVER, false, 1
+		));
+		
+		// Hollow facades
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_FACADE)),
+				MicroblockTypesHM.HOLLOW_COVER, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(4, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_FACADE)),
+				MicroblockTypesHM.HOLLOW_PANEL, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(6, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_FACADE)),
+				MicroblockTypesHM.HOLLOW_TRIPLE_COVER, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(8, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_FACADE)),
+				MicroblockTypesHM.HOLLOW_SLAB, false, 1
 		));
 		
 		// Panels
@@ -243,6 +346,28 @@ public class RecipesHM
 		e.add(new ShapelessMicroblockRecipe(
 				NonNullList.withSize(8, MicroblockIngredient.of(MicroblockTypesHM.COVER)),
 				null, true, 1
+		));
+		
+		// Facades
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(2, MicroblockIngredient.of(MicroblockTypesHM.FACADE)),
+				MicroblockTypesHM.COVER, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(4, MicroblockIngredient.of(MicroblockTypesHM.FACADE)),
+				MicroblockTypesHM.PANEL, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(6, MicroblockIngredient.of(MicroblockTypesHM.FACADE)),
+				MicroblockTypesHM.TRIPLE_COVER, false, 1
+		));
+		
+		e.add(new ShapelessMicroblockRecipe(
+				NonNullList.withSize(8, MicroblockIngredient.of(MicroblockTypesHM.FACADE)),
+				MicroblockTypesHM.SLAB, false, 1
 		));
 		
 		// Pillars -> planars

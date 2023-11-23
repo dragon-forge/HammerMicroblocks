@@ -1,8 +1,9 @@
 package org.zeith.multipart.microblocks.contents.microblocks;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.*;
 
-import java.util.List;
+import java.util.*;
 
 import static net.minecraft.world.level.block.Block.box;
 
@@ -14,16 +15,14 @@ public class PlanarHollowMicroblockType
 		super(thickness, compatibleWithSameTypeEdged);
 	}
 	
-	protected VoxelShape getCutoutShape()
+	protected VoxelShape getCutoutShape(Direction dir)
 	{
-		return Shapes.or(
-				box(5, 11, 5, 11, 16, 11),
-				box(5, 0, 5, 11, 5, 11),
-				box(5, 5, 0, 11, 11, 5),
-				box(11, 5, 5, 16, 11, 11),
-				box(5, 5, 11, 11, 11, 16),
-				box(0, 5, 5, 5, 11, 11)
-		);
+		return switch(dir.getAxis())
+		{
+			case Y -> box(5, 0, 5, 11, 16, 11);
+			case Z -> box(5, 5, 0, 11, 11, 16);
+			case X -> box(0, 5, 5, 16, 11, 11);
+		};
 	}
 	
 	protected List<VoxelShape> createFullShapes()
@@ -34,10 +33,13 @@ public class PlanarHollowMicroblockType
 	@Override
 	protected List<VoxelShape> createShapes()
 	{
-		var pipeShapes = getCutoutShape();
-		return createFullShapes()
-				.stream()
-				.map(fullShape -> Shapes.join(fullShape, pipeShapes, BooleanOp.ONLY_FIRST))
-				.toList();
+		var dirs = Direction.values();
+		var vs = new ArrayList<>(createFullShapes());
+		for(int i = 0; i < 6; i++)
+		{
+			var pipeShapes = getCutoutShape(dirs[i]);
+			vs.set(i, Shapes.join(vs.get(i), pipeShapes, BooleanOp.ONLY_FIRST));
+		}
+		return vs;
 	}
 }

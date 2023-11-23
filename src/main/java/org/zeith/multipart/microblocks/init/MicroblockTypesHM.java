@@ -9,14 +9,26 @@ public interface MicroblockTypesHM
 	@RegistryName("anti_cover")
 	PlanarMicroblockType ANTI_COVER = new PlanarMicroblockType(14, false);
 	
+	@RegistryName("hollow_anti_cover")
+	PlanarHollowMicroblockType HOLLOW_ANTI_COVER = new PlanarHollowMicroblockType(14, false);
+	
 	@RegistryName("triple_panel")
 	PlanarMicroblockType TRIPLE_PANEL = new PlanarMicroblockType(12, false);
+	
+	@RegistryName("hollow_triple_panel")
+	PlanarHollowMicroblockType HOLLOW_TRIPLE_PANEL = new PlanarHollowMicroblockType(12, false);
 	
 	@RegistryName("slab")
 	PlanarMicroblockType SLAB = new PlanarMicroblockType(8, false);
 	
+	@RegistryName("hollow_slab")
+	PlanarHollowMicroblockType HOLLOW_SLAB = new PlanarHollowMicroblockType(8, false);
+	
 	@RegistryName("triple_cover")
 	PlanarMicroblockType TRIPLE_COVER = new PlanarMicroblockType(6, true);
+	
+	@RegistryName("hollow_triple_cover")
+	PlanarHollowMicroblockType HOLLOW_TRIPLE_COVER = new PlanarHollowMicroblockType(6, true);
 	
 	@RegistryName("panel")
 	PlanarMicroblockType PANEL = new PlanarMicroblockType(4, true);
@@ -29,7 +41,13 @@ public interface MicroblockTypesHM
 	
 	@RegistryName("hollow_cover")
 	PlanarHollowMicroblockType HOLLOW_COVER = new PlanarHollowMicroblockType(2, true);
-
+	
+	@RegistryName("facade")
+	PlanarMicroblockType FACADE = new PlanarMicroblockType(1, true);
+	
+	@RegistryName("hollow_facade")
+	PlanarHollowMicroblockType HOLLOW_FACADE = new PlanarHollowMicroblockType(1, true);
+	
 	// Pillars
 	
 	@RegistryName("anticover_pillar")

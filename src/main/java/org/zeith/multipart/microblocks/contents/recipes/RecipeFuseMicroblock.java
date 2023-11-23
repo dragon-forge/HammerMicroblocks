@@ -95,7 +95,13 @@ public class RecipeFuseMicroblock
 			var result = res.map(r ->
 			{
 				if(r.outputIsFullBlock())
-					return inputs.get(0).stateAsItem().copyWithCount(r.count());
+					return inputs
+							.stream()
+							.filter(Objects::nonNull)
+							.findFirst()
+							.map(MicroblockedStack::stateAsItem)
+							.orElse(ItemStack.EMPTY)
+							.copyWithCount(r.count());
 				else
 					return ItemsHM.MICROBLOCK.forItem(r.type(), fnn.stateAsItem(), r.count(), false);
 			}).orElse(ItemStack.EMPTY);
@@ -117,7 +123,8 @@ public class RecipeFuseMicroblock
 			theType = imc.getMicroblockType(cutStack);
 			if(theState == null || theType == null) return null;
 			return new MicroblockedStack(relX, relY, false, Optional.of(theType), theState, imc.getMicroblockMaterialStack(cutStack));
-		} else
+		}
+		else
 		{
 			theType = MicroblockTypesHM.SLAB;
 			var mcb = ItemsHM.MICROBLOCK.forItem(theType, cutStack, false);

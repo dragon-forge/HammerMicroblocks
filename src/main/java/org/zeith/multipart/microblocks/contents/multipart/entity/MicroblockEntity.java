@@ -15,7 +15,9 @@ import org.jetbrains.annotations.*;
 import org.zeith.hammerlib.api.io.NBTSerializable;
 import org.zeith.multipart.api.*;
 import org.zeith.multipart.api.placement.PartPlacement;
+import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
+import org.zeith.multipart.microblocks.init.MicroblockTypesHM;
 
 import java.util.List;
 
@@ -53,6 +55,8 @@ public class MicroblockEntity
 	@Override
 	protected VoxelShape updateShape()
 	{
+		if(!state.isValid() && state.getType() == null)
+			state.setType(MicroblockTypesHM.FACADE, state.getData());
 		return state.getType().getShape(placement, state.getData());
 	}
 	
