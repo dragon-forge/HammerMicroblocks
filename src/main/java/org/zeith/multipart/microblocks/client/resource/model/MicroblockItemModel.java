@@ -18,8 +18,9 @@ import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.*;
 import org.joml.Vector3f;
 import org.zeith.hammerlib.client.model.*;
+import org.zeith.hammerlib.util.java.Cast;
 import org.zeith.multipart.microblocks.api.MicroblockType;
-import org.zeith.multipart.microblocks.init.ItemsHM;
+import org.zeith.multipart.microblocks.init.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -91,7 +92,7 @@ public class MicroblockItemModel
 			return List.of(new BakedMicroblockModelSpecific(
 					BLOCK_TRANSFORMS,
 					state,
-					type
+					Cast.or(type, MicroblockTypesHM.COVER)
 			));
 		}
 		

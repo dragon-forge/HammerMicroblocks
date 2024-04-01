@@ -44,8 +44,13 @@ public class ItemSaw
 	public ItemStack getCraftingRemainingItem(ItemStack itemStack)
 	{
 		ItemStack stack = itemStack.copy();
-		if(itemStack.getMaxDamage() > 0)
-			stack.setDamageValue(stack.getDamageValue() + 1);
+		int md = itemStack.getMaxDamage();
+		if(md > 0)
+		{
+			int dv = stack.getDamageValue();
+			if(dv < md) stack.setDamageValue(dv + 1);
+			else return ItemStack.EMPTY;
+		}
 		return stack;
 	}
 	
