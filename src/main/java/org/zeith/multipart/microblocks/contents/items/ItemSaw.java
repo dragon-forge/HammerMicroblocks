@@ -1,7 +1,9 @@
 package org.zeith.multipart.microblocks.contents.items;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.*;
 import net.minecraftforge.common.TierSortingRegistry;
 import org.zeith.hammerlib.api.fml.IRegisterListener;
 import org.zeith.hammerlib.core.adapter.TagAdapter;
@@ -48,8 +50,19 @@ public class ItemSaw
 		if(md > 0)
 		{
 			int dv = stack.getDamageValue();
-			if(dv < md) stack.setDamageValue(dv + 1);
-			else return ItemStack.EMPTY;
+			if(dv < md)
+			{
+				int i = itemStack.getEnchantmentLevel(Enchantments.UNBREAKING);
+				int j = 0;
+				int pAmount = 1;
+				for(int k = 0; i > 0 && k < pAmount; ++k)
+					if(DigDurabilityEnchantment.shouldIgnoreDurabilityDrop(itemStack, i, RandomSource.create()))
+						++j;
+				pAmount -= j;
+				if(pAmount <= 0) return stack;
+				
+				stack.setDamageValue(dv + pAmount);
+			} else return ItemStack.EMPTY;
 		}
 		return stack;
 	}
