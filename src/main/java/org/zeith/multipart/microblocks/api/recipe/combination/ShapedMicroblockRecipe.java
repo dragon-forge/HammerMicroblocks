@@ -21,11 +21,22 @@ public record ShapedMicroblockRecipe(
 {
 	public static ShapedMicroblockRecipe newRecipe(MicroblockType output, boolean outputIsFullBlock, int count, RecipeShape shape, Tuple2<Character, MicroblockIngredient>... mappings)
 	{
+		shape = rotate(shape);
 		return new ShapedMicroblockRecipe(
 				shape.width, shape.height,
 				createPattern(shape, mappings),
 				output, outputIsFullBlock, count
 		);
+	}
+	
+	public static RecipeShape rotate(RecipeShape shape)
+	{
+		String[] s = new String[shape.width];
+		Arrays.fill(s, "");
+		for(int x = 0; x < shape.width; x++)
+			for(int y = 0; y < shape.height; y++)
+				s[x] += shape.shape.get(y).charAt(x);
+		return new RecipeShape(s);
 	}
 	
 	public static NonNullList<MicroblockIngredient> createPattern(RecipeShape shape, Tuple2<Character, MicroblockIngredient>... mappings)

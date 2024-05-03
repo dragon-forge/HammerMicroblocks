@@ -21,6 +21,12 @@ microblock_type.hammermicroblocks.cover_pillar=Cover Pillar
 microblock_type.hammermicroblocks.hollow_cover=Hollow Cover
 microblock_type.hammermicroblocks.facade=Facade
 microblock_type.hammermicroblocks.hollow_facade=Hollow Facade
+microblock_type.hammermicroblocks.anticover_corner=Anti-Cover Corner
+microblock_type.hammermicroblocks.triple_panel_corner=Triple Panel Corner
+microblock_type.hammermicroblocks.slab_corner=Slab Corner
+microblock_type.hammermicroblocks.triple_cover_corner=Triple Cover Corner
+microblock_type.hammermicroblocks.panel_corner=Panel Corner
+microblock_type.hammermicroblocks.cover_corner=Cover Corner
 
 item.hammermicroblocks.microblock=Microblock
 item.hammermicroblocks.microblock_formatted=%s (%s)

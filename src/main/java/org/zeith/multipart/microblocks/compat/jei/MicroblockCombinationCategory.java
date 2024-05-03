@@ -71,8 +71,8 @@ public class MicroblockCombinationCategory
 		
 		if(recipe instanceof ShapedMicroblockRecipe r)
 		{
-			width = r.width();
-			height = r.height();
+			width = r.height();
+			height = r.width();
 			inputsRaw = r.inputs();
 		} else if(recipe instanceof ShapelessMicroblockRecipe r)
 		{

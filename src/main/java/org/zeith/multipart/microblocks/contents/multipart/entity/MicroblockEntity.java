@@ -1,6 +1,7 @@
 package org.zeith.multipart.microblocks.contents.multipart.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -11,11 +12,13 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.api.io.NBTSerializable;
+import org.zeith.hammerlib.util.java.Cast;
 import org.zeith.multipart.api.*;
 import org.zeith.multipart.api.placement.PartPlacement;
-import org.zeith.multipart.microblocks.api.MicroblockType;
+import org.zeith.multipart.api.placement.PartPos;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
 import org.zeith.multipart.microblocks.init.MicroblockTypesHM;
 
@@ -26,6 +29,9 @@ public class MicroblockEntity
 {
 	@NBTSerializable("State")
 	public final MicroblockState state = new MicroblockState();
+	
+	// This is for client-side whenever resolving model faces, to let the getAppearance method know of the origin.
+	public static final ThreadLocal<PartPos> queryMicroblock = ThreadLocal.withInitial(Cast.constant(null));
 	
 	public MicroblockEntity(PartDefinition definition, PartContainer container, PartPlacement placement)
 	{
@@ -38,6 +44,14 @@ public class MicroblockEntity
 		syncDirty = true;
 		container.causeBlockUpdate = true;
 		return this;
+	}
+	
+	@Override
+	public BlockState getAppearance(BlockState state, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
+	{
+		var pc = queryPos != null ? WorldPartComponents.getContainer(container().level(), queryPos) : null;
+		var grid = this.state.getType().getPlacementGrid();
+		return grid.getAppearance(this, placement(), side, queryState, queryPos, pc, queryMicroblock.get());
 	}
 	
 	@Override

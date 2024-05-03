@@ -1,23 +1,46 @@
 package org.zeith.multipart.microblocks.api.grids;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.zeith.multipart.api.PartContainer;
 import org.zeith.multipart.api.placement.PartPlacement;
+import org.zeith.multipart.api.placement.PartPos;
 import org.zeith.multipart.blocks.BlockMultipartContainer;
 import org.zeith.multipart.init.PartPlacementsHM;
+import org.zeith.multipart.microblocks.contents.multipart.entity.MicroblockEntity;
+import org.zeith.multipart.microblocks.contents.multipart.placements.CubicPartPlacement;
 
-import java.util.*;
+import java.util.List;
 
 public class PlanarPlacementGrid
 		extends MicroblockPlacementGrid
 {
 	public static final PlanarPlacementGrid INSTANCE = new PlanarPlacementGrid();
 	
-	protected final Map<Direction, List<Vector3f>> lines = new HashMap<>();
+	@Override
+	public @Nullable BlockState getAppearance(MicroblockEntity thisEntity, PartPlacement thisPlacement, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos, @Nullable PartContainer queryContainer, @Nullable PartPos queryPartPos)
+	{
+		if(queryPartPos != null)
+		{
+			if(queryPartPos.placement() == thisPlacement)
+				return thisEntity.state.asBlockState();
+			if(!(queryPartPos.placement() instanceof CubicPartPlacement))
+				return null;
+		}
+		
+		if(side == thisPlacement.getDirection())
+			return thisEntity.state.asBlockState();
+		
+		return null;
+	}
 	
 	@Override
 	public @Nullable PartPlacement pickPlacement(Player player, BlockHitResult hit, boolean sameBlock)
@@ -194,6 +217,6 @@ public class PlanarPlacementGrid
 			);
 		}
 		
-		return lines.getOrDefault(hit.getDirection(), List.of());
+		return List.of();
 	}
 }

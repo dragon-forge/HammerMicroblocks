@@ -18,6 +18,7 @@ import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.model.data.ModelData;
 import org.zeith.multipart.api.PartContainer;
 import org.zeith.multipart.api.placement.PartPlacement;
+import org.zeith.multipart.api.placement.PartPos;
 import org.zeith.multipart.init.PartPlacementsHM;
 import org.zeith.multipart.microblocks.api.*;
 import org.zeith.multipart.microblocks.contents.microblocks.PlanarMicroblockType;
@@ -143,15 +144,19 @@ public class ModelGeneratorSystem
 			kicker.setThickness(planarThickness);
 		}
 		
+		MicroblockEntity.queryMicroblock.set(new PartPos(pos, placement));
+		
 		QuadReInterpolator interpolator = new QuadReInterpolator();
+		
+		var modelData = model.getModelData(facadeAccess, pos, blockState, ModelData.EMPTY);;
 		
 		for(int cullFaceIdx = 0; cullFaceIdx <= ModelHelper.NULL_FACE_ID; cullFaceIdx++)
 		{
 			Direction cullFace = ModelHelper.faceFromIndex(cullFaceIdx);
-			List<BakedQuad> quads = renderType == null || model.getRenderTypes(blockState, random, ModelData.EMPTY)
-					.contains(renderType) ?
-									model.getQuads(blockState, cullFace, random, ModelData.EMPTY, renderType)
-										  : List.of();
+			
+			List<BakedQuad> quads = renderType == null || model.getRenderTypes(blockState, random, modelData).contains(renderType)
+									? model.getQuads(blockState, cullFace, random, modelData, renderType)
+									: List.of();
 			
 			for(BakedQuad quad : quads)
 			{
@@ -213,6 +218,8 @@ public class ModelGeneratorSystem
 				}
 			}
 		}
+		
+		MicroblockEntity.queryMicroblock.set(null);
 		
 		return meshBuilder.build();
 	}

@@ -85,43 +85,36 @@ public class RecipesHM
 				MicroblockTypesHM.SLAB,
 				2
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.SLAB))),
 				MicroblockTypesHM.PANEL,
 				2
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.PANEL))),
 				MicroblockTypesHM.COVER,
 				2
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.COVER))),
 				MicroblockTypesHM.FACADE,
 				2
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_PANEL))),
 				MicroblockTypesHM.HOLLOW_COVER,
 				2
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.ANTI_COVER))),
 				MicroblockTypesHM.COVER,
 				7
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER))),
 				MicroblockTypesHM.COVER,
 				3
 		));
-		
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(0, 1, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL))),
 				MicroblockTypesHM.PANEL,
@@ -157,6 +150,38 @@ public class RecipesHM
 		e.add(new MicroblockConversionRecipe(
 				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.ANTI_COVER))),
 				MicroblockTypesHM.ANTICOVER_PILLAR,
+				2
+		));
+		
+		// Corners
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.SLAB_PILLAR))),
+				MicroblockTypesHM.SLAB_CORNER,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.PANEL_PILLAR))),
+				MicroblockTypesHM.PANEL_CORNER,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.COVER_PILLAR))),
+				MicroblockTypesHM.COVER_CORNER,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL_PILLAR))),
+				MicroblockTypesHM.TRIPLE_PANEL_CORNER,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER_PILLAR))),
+				MicroblockTypesHM.TRIPLE_COVER_CORNER,
+				2
+		));
+		e.add(new MicroblockConversionRecipe(
+				List.of(new MicroblockInput(1, 0, MicroblockIngredient.of(MicroblockTypesHM.ANTICOVER_PILLAR))),
+				MicroblockTypesHM.ANTICOVER_CORNER,
 				2
 		));
 	}
@@ -238,6 +263,38 @@ public class RecipesHM
 				MicroblockTypesHM.ANTI_COVER, false, 8,
 				new RecipeShape("ccc", "c c", "ccc"),
 				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.HOLLOW_ANTI_COVER))
+		));
+		
+		// Corners
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.COVER_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.COVER_CORNER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.PANEL_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.PANEL_CORNER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.TRIPLE_COVER_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_COVER_CORNER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.SLAB_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.SLAB_CORNER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.TRIPLE_PANEL_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.TRIPLE_PANEL_CORNER))
+		));
+		e.add(ShapedMicroblockRecipe.newRecipe(
+				MicroblockTypesHM.ANTICOVER_PILLAR, false, 1,
+				new RecipeShape("c", "c"),
+				Tuples.immutable('c', MicroblockIngredient.of(MicroblockTypesHM.ANTICOVER_CORNER))
 		));
 	}
 	

@@ -67,4 +67,24 @@ public interface MicroblockTypesHM
 	
 	@RegistryName("cover_pillar")
 	PillarMicroblockType COVER_PILLAR = new PillarMicroblockType(2F);
+	
+	// Corners
+	
+	@RegistryName("anticover_corner")
+	CubicMicroblockType ANTICOVER_CORNER = new CubicMicroblockType(14F);
+	
+	@RegistryName("triple_panel_corner")
+	CubicMicroblockType TRIPLE_PANEL_CORNER = new CubicMicroblockType(12F);
+	
+	@RegistryName("slab_corner")
+	CubicMicroblockType SLAB_CORNER = new CubicMicroblockType(8F);
+	
+	@RegistryName("triple_cover_corner")
+	CubicMicroblockType TRIPLE_COVER_CORNER = new CubicMicroblockType(6F);
+	
+	@RegistryName("panel_corner")
+	CubicMicroblockType PANEL_CORNER = new CubicMicroblockType(4F);
+	
+	@RegistryName("cover_corner")
+	CubicMicroblockType COVER_CORNER = new CubicMicroblockType(2F);
 }

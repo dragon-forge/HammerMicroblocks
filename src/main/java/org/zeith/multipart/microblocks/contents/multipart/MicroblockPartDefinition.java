@@ -1,6 +1,7 @@
 package org.zeith.multipart.microblocks.contents.multipart;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -10,8 +11,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.*;
+import org.zeith.hammerlib.util.java.Cast;
 import org.zeith.multipart.api.*;
 import org.zeith.multipart.api.placement.*;
 import org.zeith.multipart.client.*;
@@ -56,10 +59,23 @@ public class MicroblockPartDefinition
 			{
 				if(!(part instanceof MicroblockEntity mb) || !mb.state.isValid()) return null;
 				
+				var ctr = part.container();
+				var level = Cast.cast(ctr.level(), ClientLevel.class);
+				var pos = ctr.pos();
+				
+				if(level == null) return null;
+				
 				var mc = Minecraft.getInstance();
-				var model = mc.getBlockRenderer().getBlockModel(mb.state.asBlockState());
+				var state = mb.state.asBlockState();
+				var model = mc.getBlockRenderer().getBlockModel(state);
+				
+				int color = 0xFFFFFF;
+				
+				if(IClientBlockExtensions.of(state).areBreakingParticlesTinted(state, level, pos))
+					color = Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0);
 				
 				return new MultipartEffects.TintedSprite(
+						color,
 						model.getParticleIcon(ModelData.EMPTY)
 				);
 			}
