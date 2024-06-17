@@ -76,7 +76,7 @@ public record ShapedMicroblockRecipe(
 	
 	public boolean matches(List<MicroblockedStack> provided, int providedWidth, int providedHeight)
 	{
-		if(provided.size() < width * height) return false;
+		if(provided.stream().filter(Objects::nonNull).count() != (long) width * height) return false;
 		for(int x = 0; x <= providedWidth - this.width; ++x)
 		{
 			for(int y = 0; y <= providedHeight - this.height; ++y)
