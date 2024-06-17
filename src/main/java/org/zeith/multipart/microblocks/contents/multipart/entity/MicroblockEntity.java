@@ -113,6 +113,7 @@ public class MicroblockEntity
 		return state.asBlockState().isViewBlocking(container.level(), container.pos());
 	}
 	
+	@Override
 	public SoundType getSoundType()
 	{
 		return state.asBlockState().getSoundType();
