@@ -5,22 +5,24 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.zeith.multipart.api.PartContainer;
 import org.zeith.multipart.api.placement.PartPlacement;
 import org.zeith.multipart.api.placement.PartPos;
 import org.zeith.multipart.init.PartPlacementsHM;
-import org.zeith.multipart.microblocks.api.*;
+import org.zeith.multipart.microblocks.api.MicroblockData;
+import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.contents.microblocks.PlanarMicroblockType;
 import org.zeith.multipart.microblocks.contents.multipart.entity.MicroblockEntity;
 import org.zeith.multipart.microblocks.shadow.codechicken.lib.model.pipeline.transformers.*;
@@ -148,7 +150,7 @@ public class ModelGeneratorSystem
 		
 		QuadReInterpolator interpolator = new QuadReInterpolator();
 		
-		var modelData = model.getModelData(facadeAccess, pos, blockState, ModelData.EMPTY);;
+		var modelData = model.getModelData(facadeAccess, pos, blockState, ModelData.EMPTY);
 		
 		for(int cullFaceIdx = 0; cullFaceIdx <= ModelHelper.NULL_FACE_ID; cullFaceIdx++)
 		{

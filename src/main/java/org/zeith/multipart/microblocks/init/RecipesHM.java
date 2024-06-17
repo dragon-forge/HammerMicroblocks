@@ -1,11 +1,13 @@
 package org.zeith.multipart.microblocks.init;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.Tags;
 import org.zeith.hammerlib.annotations.ProvideRecipes;
 import org.zeith.hammerlib.api.IRecipeProvider;
 import org.zeith.hammerlib.core.RecipeHelper;
@@ -16,7 +18,8 @@ import org.zeith.hammerlib.util.java.tuples.Tuples;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.recipe.*;
 import org.zeith.multipart.microblocks.api.recipe.combination.*;
-import org.zeith.multipart.microblocks.contents.recipes.*;
+import org.zeith.multipart.microblocks.contents.recipes.RecipeCutMicroblock;
+import org.zeith.multipart.microblocks.contents.recipes.RecipeFuseMicroblock;
 
 import java.util.List;
 
@@ -26,9 +29,9 @@ public class RecipesHM
 {
 	static
 	{
-		MinecraftForge.EVENT_BUS.addListener(RecipesHM::addConversions);
-		MinecraftForge.EVENT_BUS.addListener(RecipesHM::addFusions);
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, RecipesHM::addFusionsLast);
+		NeoForge.EVENT_BUS.addListener(RecipesHM::addConversions);
+		NeoForge.EVENT_BUS.addListener(RecipesHM::addFusions);
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOW, RecipesHM::addFusionsLast);
 	}
 	
 	@Override
@@ -66,16 +69,16 @@ public class RecipesHM
 				.result(ItemsHM.DIAMOND_SAW)
 				.register();
 		
-		var id = ForgeRegistries.ITEMS.getKey(ItemsHM.NETHERITE_SAW);
-		e.register(id, new SmithingTransformRecipe(id,
+		var id = BuiltInRegistries.ITEM.getKey(ItemsHM.NETHERITE_SAW);
+		e.register(id, new SmithingTransformRecipe(
 				Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
 				Ingredient.of(ItemsHM.DIAMOND_SAW),
 				RecipeHelper.fromTag(Tags.Items.INGOTS_NETHERITE),
 				new ItemStack(ItemsHM.NETHERITE_SAW)
 		));
 		
-		e.add(new RecipeCutMicroblock(HammerMicroblocks.id("microblock_cutting")));
-		e.add(new RecipeFuseMicroblock(HammerMicroblocks.id("microblock_fusion")));
+		e.add(new RecipeHolder<>(HammerMicroblocks.id("microblock_cutting"), new RecipeCutMicroblock()));
+		e.add(new RecipeHolder<>(HammerMicroblocks.id("microblock_fusion"), new RecipeFuseMicroblock()));
 	}
 	
 	private static void addConversions(GatherMicroblockConversionRecipesEvent e)

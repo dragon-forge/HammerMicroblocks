@@ -19,9 +19,10 @@ public record ShapedMicroblockRecipe(
 )
 		implements IMicroblockComboRecipe
 {
+	@SafeVarargs
 	public static ShapedMicroblockRecipe newRecipe(MicroblockType output, boolean outputIsFullBlock, int count, RecipeShape shape, Tuple2<Character, MicroblockIngredient>... mappings)
 	{
-		shape = rotate(shape);
+//		shape = rotate(shape);
 		return new ShapedMicroblockRecipe(
 				shape.width, shape.height,
 				createPattern(shape, mappings),

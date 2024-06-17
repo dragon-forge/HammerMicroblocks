@@ -1,14 +1,20 @@
 package org.zeith.multipart.microblocks.api.tile;
 
+import lombok.Getter;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.zeith.hammerlib.util.mcf.Resources;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
-import org.zeith.multipart.microblocks.api.*;
+import org.zeith.multipart.microblocks.api.MicroblockData;
+import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.init.ItemsHM;
 
 import java.util.Objects;
@@ -16,8 +22,12 @@ import java.util.Objects;
 public class MicroblockState
 		implements INBTSerializable<CompoundTag>
 {
+	@Getter
 	protected MicroblockType type;
+	
+	@Getter
 	protected MicroblockData data;
+	
 	protected Item material = Items.AIR;
 	
 	public MicroblockState()
@@ -27,16 +37,6 @@ public class MicroblockState
 	public boolean isValid()
 	{
 		return type != null && material != Items.AIR;
-	}
-	
-	public MicroblockType getType()
-	{
-		return type;
-	}
-	
-	public MicroblockData getData()
-	{
-		return data;
 	}
 	
 	public MicroblockState setType(MicroblockType type, MicroblockData data)
@@ -71,24 +71,27 @@ public class MicroblockState
 	}
 	
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		var tag = new CompoundTag();
 		tag.putString("Type", Objects.toString(HammerMicroblocks.microblockTypes().getKey(type)));
-		if(this.data != null) tag.put("Data", this.data.serializeNBT());
-		tag.putString("Id", Objects.toString(ForgeRegistries.ITEMS.getKey(material)));
+		if(this.data != null) tag.put("Data", this.data.serializeNBT(provider));
+		tag.putString("Id", Objects.toString(material.builtInRegistryHolder().key().location()));
 		return tag;
 	}
 	
 	@Override
-	public void deserializeNBT(CompoundTag tag)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag)
 	{
-		this.type = HammerMicroblocks.microblockTypes().getValue(ResourceLocation.tryParse(tag.getString("Type")));
+		this.type = HammerMicroblocks.microblockTypes().get(ResourceLocation.tryParse(tag.getString("Type")));
 		if(this.type != null)
 		{
 			this.data = this.type.createEmptyData();
-			if(this.data != null) this.data.deserializeNBT(tag.getCompound("Data"));
+			if(this.data != null) this.data.deserializeNBT(provider, tag.getCompound("Data"));
 		}
-		this.material = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(tag.getString("Id")));
+		this.material = provider.lookupOrThrow(Registries.ITEM)
+				.get(ResourceKey.create(Registries.ITEM, Resources.location(tag.getString("Id"))))
+				.map(Holder.Reference::value)
+				.orElseThrow();
 	}
 }

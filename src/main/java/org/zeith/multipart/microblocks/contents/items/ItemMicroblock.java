@@ -1,28 +1,32 @@
 package org.zeith.multipart.microblocks.contents.items;
 
 import net.minecraft.Util;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.*;
+import net.minecraft.tags.TagEntry;
+import net.minecraft.tags.TagLoader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.EmptyBlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.*;
 import org.zeith.hammerlib.HammerLib;
 import org.zeith.hammerlib.api.items.ITabItem;
 import org.zeith.hammerlib.event.recipe.BuildTagsEvent;
+import org.zeith.hammerlib.util.mcf.Resources;
 import org.zeith.multipart.api.item.IMultipartPlacerItem;
-import org.zeith.multipart.api.placement.*;
+import org.zeith.multipart.api.placement.PartPlacement;
+import org.zeith.multipart.api.placement.PlacedPartConfiguration;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.MicroblockType;
+import org.zeith.multipart.microblocks.api.data.MicroblockComponent;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
-import org.zeith.multipart.microblocks.init.*;
 import org.zeith.multipart.microblocks.contents.multipart.MicroblockPartDefinition;
+import org.zeith.multipart.microblocks.init.PartDefinitionsHM;
+import org.zeith.multipart.microblocks.init.TagsHM;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -111,8 +115,11 @@ public class ItemMicroblock
 		var state = new MicroblockState();
 		PartPlacement placement;
 		
-		var mbt = getMicroblockType(stack);
-		var mat = getMicroblockMaterialStack(stack);
+		var mcb = MicroblockComponent.get(stack);
+		if(mcb == null) return Optional.empty();
+		
+		var mbt = mcb.type();
+		var mat = mcb.materialStack();
 		
 		if(mbt == null || mat.isEmpty()) return Optional.empty();
 		
@@ -128,9 +135,9 @@ public class ItemMicroblock
 	
 	private void applyTags(BuildTagsEvent e)
 	{
-		if(e.reg.getRegistryKey() == ForgeRegistries.Keys.BLOCKS)
+		if(e.reg.key() == Registries.BLOCK)
 		{
-			var ae2Facades = new ResourceLocation("ae2", "whitelisted/facades");
+			var ae2Facades = Resources.location("ae2", "whitelisted/facades");
 			
 			var entries = e.tags.getOrDefault(TagsHM.Blocks.MICROBLOCK_BLOCKLIST.location(), List.of())
 					.stream()
@@ -148,57 +155,16 @@ public class ItemMicroblock
 						forced.addAll(vals);
 				
 				HammerMicroblocks.LOG.info("Added " + e.tags.get(ae2Facades).size() +
-						" AE2 facade whitelisted blocks to our own microblock whitelist.");
+										   " AE2 facade whitelisted blocks to our own microblock whitelist.");
 			}
 			
 			HammerMicroblocks.LOG.info(
 					"Currently, we have " + forced.size() + " force-white-listed blocks to be slice-able: " +
-							forced.stream()
-									.map(e0 -> e0.entry().toString())
-									.collect(Collectors.joining(", ", "[", "]"))
+					forced.stream()
+							.map(e0 -> e0.entry().toString())
+							.collect(Collectors.joining(", ", "[", "]"))
 			);
 		}
-	}
-	
-	public String getSubtypeFromStack(ItemStack stack)
-	{
-		var mcb = stack.getTagElement("Microblock");
-		if(mcb != null)
-		{
-			var type = ResourceLocation.tryParse(mcb.getString("Type"));
-			var itemId = ResourceLocation.tryParse(mcb.getString("Item"));
-			return type + ";" + itemId;
-		}
-		return "null";
-	}
-	
-	@Nullable
-	public MicroblockType getMicroblockType(ItemStack stack)
-	{
-		var mcb = stack.getTagElement("Microblock");
-		if(mcb != null)
-			return HammerMicroblocks.microblockTypes()
-					.getValue(ResourceLocation.tryParse(mcb.getString("Type")));
-		return null;
-	}
-	
-	@NotNull
-	public ItemStack getMicroblockMaterialStack(ItemStack stack)
-	{
-		var nbt = stack.getTagElement("Microblock");
-		if(nbt == null) return ItemStack.EMPTY;
-		var itemId = ResourceLocation.tryParse(nbt.getString("Item"));
-		return new ItemStack(ForgeRegistries.ITEMS.getValue(itemId));
-	}
-	
-	@Nullable
-	public BlockState getMicroblockMaterialState(ItemStack is)
-	{
-		var baseItemStack = getMicroblockMaterialStack(is);
-		if(baseItemStack.isEmpty()) return null;
-		var block = Block.byItem(baseItemStack.getItem());
-		if(block == Blocks.AIR) return null;
-		return block.defaultBlockState();
 	}
 	
 	public ItemStack forItem(MicroblockType type, ItemStack itemStack, boolean returnItem)
@@ -209,7 +175,7 @@ public class ItemMicroblock
 	public ItemStack forItem(MicroblockType type, ItemStack itemStack, int size, boolean returnItem)
 	{
 		Block block;
-		if(itemStack.isEmpty() || itemStack.hasTag() || (block = Block.byItem(itemStack.getItem())) == Blocks.AIR)
+		if(itemStack.isEmpty() || (block = Block.byItem(itemStack.getItem())) == Blocks.AIR)
 			return ItemStack.EMPTY;
 		
 		// We only support the default state for microblocks. Sorry.
@@ -224,18 +190,16 @@ public class ItemMicroblock
 		return ItemStack.EMPTY;
 	}
 	
-	public ItemStack forItemRaw(MicroblockType type, ItemStack itemStack, int size)
+	public ItemStack forItemRaw(MicroblockType type, ItemStack material, int size)
 	{
 		var is = new ItemStack(this, size);
-		var tag = is.getOrCreateTagElement("Microblock");
-		tag.putString("Item", Objects.toString(ForgeRegistries.ITEMS.getKey(itemStack.getItem())));
-		tag.putString("Type", Objects.toString(HammerMicroblocks.microblockTypes().getKey(type)));
+		is.set(MicroblockComponent.TYPE, new MicroblockComponent(type, material.getItem().builtInRegistryHolder()));
 		return is;
 	}
 	
 	private boolean allowBlockAsFacade(Block block)
 	{
-		if(block instanceof AbstractGlassBlock)
+		if(block instanceof TransparentBlock)
 			return true;
 		
 		if(block instanceof LeavesBlock)
@@ -265,12 +229,9 @@ public class ItemMicroblock
 	{
 		try
 		{
-			var in = this.getMicroblockMaterialStack(is);
-			var type = this.getMicroblockType(is);
-			
-			if(!in.isEmpty() && type != null)
-				return Component.translatable(
-						getDescriptionId() + "_formatted", type.getDescription(), in.getHoverName());
+			var mcb = MicroblockComponent.get(is);
+			if(mcb != null)
+				return Component.translatable(getDescriptionId() + "_formatted", mcb.type().getDescription(), mcb.materialStack().getHoverName());
 		} catch(Throwable ignored)
 		{
 		}
@@ -278,7 +239,7 @@ public class ItemMicroblock
 	}
 	
 	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
+	public void fillItemCategory(CreativeModeTab tab, Set<ItemStack> items)
 	{
 		if(!allowedIn(tab)) return;
 		

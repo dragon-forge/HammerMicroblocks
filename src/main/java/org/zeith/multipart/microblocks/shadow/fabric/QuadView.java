@@ -37,7 +37,7 @@ public interface QuadView
     /**
      * Count of integers in a conventional (un-modded) block or item vertex.
      */
-    int VANILLA_VERTEX_STRIDE = DefaultVertexFormat.BLOCK.getIntegerSize();
+    int VANILLA_VERTEX_STRIDE = DefaultVertexFormat.BLOCK.getVertexSize() / 4;
     
     /**
      * Count of integers in a conventional (un-modded) block or item quad.

@@ -1,11 +1,12 @@
 package org.zeith.multipart.microblocks.init;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
 import org.zeith.hammerlib.annotations.Setup;
+import org.zeith.hammerlib.core.RecipeHelper;
 import org.zeith.hammerlib.core.adapter.TagAdapter;
+import org.zeith.hammerlib.util.mcf.Resources;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 
 public class TagsHM
@@ -31,7 +32,7 @@ public class TagsHM
 		
 		private static TagKey<Block> create(String name)
 		{
-			return BlockTags.create(new ResourceLocation(name));
+			return BlockTags.create(Resources.location(name));
 		}
 		
 		private static TagKey<Block> modTag(String name)
@@ -50,8 +51,7 @@ public class TagsHM
 		
 		private static TagKey<Item> tag(String name)
 		{
-			return ItemTags.create(new ResourceLocation("forge", name));
+			return ItemTags.create(Resources.location(RecipeHelper.NEOFORGE_MOD_ID_FOR_TAGS, name));
 		}
-		
 	}
 }

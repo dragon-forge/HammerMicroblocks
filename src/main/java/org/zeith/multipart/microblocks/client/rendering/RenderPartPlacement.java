@@ -5,25 +5,31 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.util.*;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import org.zeith.multipart.api.*;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import org.zeith.multipart.api.IndexedVoxelShape;
+import org.zeith.multipart.api.PartEntity;
 import org.zeith.multipart.blocks.BlockMultipartContainer;
+import org.zeith.multipart.microblocks.api.data.MicroblockComponent;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
 import org.zeith.multipart.microblocks.client.resource.model.ModelGeneratorSystem;
 import org.zeith.multipart.microblocks.contents.multipart.MicroblockPartDefinition;
-import org.zeith.multipart.microblocks.init.*;
+import org.zeith.multipart.microblocks.init.ItemsHM;
+import org.zeith.multipart.microblocks.init.PartDefinitionsHM;
 
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class RenderPartPlacement
 {
 	public static float r = 0, g = 0, b = 0, a = 0.4F;
@@ -40,8 +46,10 @@ public class RenderPartPlacement
 		var microblockStack = pl.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!microblockStack.is(ItemsHM.MICROBLOCK)) microblockStack = pl.getItemInHand(InteractionHand.OFF_HAND);
 		if(!microblockStack.is(ItemsHM.MICROBLOCK)) return;
-		var type = ItemsHM.MICROBLOCK.getMicroblockType(microblockStack);
-		var microstate = ItemsHM.MICROBLOCK.getMicroblockMaterialState(microblockStack);
+		var mcb = microblockStack.get(MicroblockComponent.TYPE);
+		if(mcb == null) return;
+		var type = mcb.type();
+		var microstate = mcb.materialState();
 		var pos = hit.getBlockPos();
 		if(type == null || microstate == null || pos == null) return;
 		var state = mc.level.getBlockState(pos);
@@ -102,7 +110,7 @@ public class RenderPartPlacement
 			);
 			
 			if(!placement.canBePlacedAlongside(pc.parts().stream().map(PartEntity::placement)
-												 .collect(Collectors.toSet())))
+					.collect(Collectors.toSet())))
 			{
 				shift = true;
 				break c;
@@ -187,8 +195,10 @@ public class RenderPartPlacement
 		var microblockStack = pl.getItemInHand(InteractionHand.MAIN_HAND);
 		if(!microblockStack.is(ItemsHM.MICROBLOCK)) microblockStack = pl.getItemInHand(InteractionHand.OFF_HAND);
 		if(!microblockStack.is(ItemsHM.MICROBLOCK)) return;
-		var type = ItemsHM.MICROBLOCK.getMicroblockType(microblockStack);
-		var microstate = ItemsHM.MICROBLOCK.getMicroblockMaterialState(microblockStack);
+		var mcb = microblockStack.get(MicroblockComponent.TYPE);
+		if(mcb == null) return;
+		var type = mcb.type();
+		var microstate = mcb.materialState();
 		if(type == null || microstate == null) return;
 		var hit = e.getTarget();
 		var pos = hit.getBlockPos();
@@ -206,7 +216,6 @@ public class RenderPartPlacement
 		
 		var last = pose.last();
 		var p = last.pose();
-		var n = last.normal();
 		
 		Vec3 vec3 = e.getCamera().getPosition();
 		double x = pos.getX() - vec3.x();
@@ -231,15 +240,13 @@ public class RenderPartPlacement
 				dY /= len;
 				dZ /= len;
 				
-				vb.vertex(p, (float) (x1 + x), (float) (y1 + y), (float) (z1 + z))
-				  .color(r, g, b, a)
-				  .normal(n, dX, dY, dZ)
-				  .endVertex();
+				vb.addVertex(p, (float) (x1 + x), (float) (y1 + y), (float) (z1 + z))
+						.setColor(r, g, b, a)
+						.setNormal(last, dX, dY, dZ);
 				
-				vb.vertex(p, (float) (x2 + x), (float) (y2 + y), (float) (z2 + z))
-				  .color(r, g, b, a)
-				  .normal(n, dX, dY, dZ)
-				  .endVertex();
+				vb.addVertex(p, (float) (x2 + x), (float) (y2 + y), (float) (z2 + z))
+						.setColor(r, g, b, a)
+						.setNormal(last, dX, dY, dZ);
 			}
 		}
 		

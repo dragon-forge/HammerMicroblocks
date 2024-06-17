@@ -1,28 +1,31 @@
 package org.zeith.multipart.microblocks.client.resource.model;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
-import org.jetbrains.annotations.*;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.zeith.hammerlib.client.model.*;
 import org.zeith.hammerlib.util.java.Cast;
 import org.zeith.multipart.microblocks.api.MicroblockType;
-import org.zeith.multipart.microblocks.init.*;
+import org.zeith.multipart.microblocks.api.data.MicroblockComponent;
+import org.zeith.multipart.microblocks.init.ItemsHM;
+import org.zeith.multipart.microblocks.init.MicroblockTypesHM;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 @LoadUnbakedGeometry(path = "microblock_item")
@@ -49,15 +52,9 @@ public class MicroblockItemModel
 	);
 	
 	@Override
-	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation)
+	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides)
 	{
 		return new BakedMicroblockModelRouter();
-	}
-	
-	@Override
-	public Collection<Material> getMaterials(IGeometryBakingContext context, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
-	{
-		return List.of();
 	}
 	
 	public static class BakedMicroblockModelRouter
@@ -78,21 +75,21 @@ public class MicroblockItemModel
 		@Override
 		public List<RenderType> getRenderTypes(ItemStack itemStack, boolean fabulous)
 		{
-			var state = ItemsHM.MICROBLOCK.getMicroblockMaterialStack(itemStack);
-			var model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(state);
+			var com = itemStack.get(MicroblockComponent.TYPE);
+			if(com == null) return List.of();
+			var model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(com.materialStack());
 			return model.getRenderTypes(itemStack, fabulous);
 		}
 		
 		@Override
 		public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous)
 		{
-			var state = ItemsHM.MICROBLOCK.getMicroblockMaterialStack(itemStack);
-			var type = ItemsHM.MICROBLOCK.getMicroblockType(itemStack);
-			
+			var com = itemStack.get(MicroblockComponent.TYPE);
+			if(com == null) return List.of();
 			return List.of(new BakedMicroblockModelSpecific(
 					BLOCK_TRANSFORMS,
-					state,
-					Cast.or(type, MicroblockTypesHM.COVER)
+					com.materialStack(),
+					Cast.or(com.type(), MicroblockTypesHM.COVER)
 			));
 		}
 		

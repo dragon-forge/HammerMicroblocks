@@ -1,20 +1,21 @@
 package org.zeith.multipart.microblocks.contents.recipes;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonObject;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.multipart.microblocks.api.MicroblockType;
+import org.zeith.multipart.microblocks.api.data.MicroblockComponent;
 import org.zeith.multipart.microblocks.api.recipe.MicroblockedStack;
-import org.zeith.multipart.microblocks.api.recipe.combination.*;
-import org.zeith.multipart.microblocks.contents.items.ItemMicroblock;
+import org.zeith.multipart.microblocks.api.recipe.combination.GatherMicroblockComboRecipesEvent;
+import org.zeith.multipart.microblocks.api.recipe.combination.IMicroblockComboRecipe;
 import org.zeith.multipart.microblocks.init.*;
 
 import java.util.*;
@@ -23,13 +24,6 @@ public class RecipeFuseMicroblock
 		implements CraftingRecipe
 {
 	protected final List<IMicroblockComboRecipe> conversions = GatherMicroblockComboRecipesEvent.get();
-	
-	protected final ResourceLocation id;
-	
-	public RecipeFuseMicroblock(ResourceLocation id)
-	{
-		this.id = id;
-	}
 	
 	@Override
 	public CraftingBookCategory category()
@@ -44,7 +38,7 @@ public class RecipeFuseMicroblock
 	}
 	
 	@Override
-	public boolean matches(CraftingContainer inv, Level worldIn)
+	public boolean matches(CraftingInput inv, Level worldIn)
 	{
 		return !assemble(inv, worldIn.registryAccess()).isEmpty();
 	}
@@ -56,10 +50,10 @@ public class RecipeFuseMicroblock
 	}
 	
 	@Override
-	public ItemStack assemble(CraftingContainer inv, RegistryAccess access)
+	public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider)
 	{
-		var w = inv.getWidth();
-		var h = inv.getHeight();
+		var w = inv.width();
+		var h = inv.height();
 		
 		// Gather all inputs
 		MicroblockedStack firstNonNull = null;
@@ -67,7 +61,7 @@ public class RecipeFuseMicroblock
 		for(int x = 0; x < w; ++x)
 			for(int y = 0; y < h; y++)
 			{
-				var item = inv.getItem(x + y * w).copyWithCount(1);
+				var item = inv.getItem(x, y).copyWithCount(1);
 				if(item.isEmpty())
 				{
 					inputs.add(null);
@@ -117,19 +111,19 @@ public class RecipeFuseMicroblock
 	{
 		BlockState theState;
 		MicroblockType theType;
-		if(cutStack.getItem() instanceof ItemMicroblock imc)
+		if(cutStack.has(MicroblockComponent.TYPE))
 		{
-			theState = imc.getMicroblockMaterialState(cutStack);
-			theType = imc.getMicroblockType(cutStack);
+			var com = MicroblockComponent.get(cutStack);
+			theState = com.materialState();
+			theType = com.type();
 			if(theState == null || theType == null) return null;
-			return new MicroblockedStack(relX, relY, false, Optional.of(theType), theState, imc.getMicroblockMaterialStack(cutStack));
-		}
-		else
+			return new MicroblockedStack(relX, relY, false, Optional.of(theType), theState, com.materialStack());
+		} else
 		{
 			theType = MicroblockTypesHM.SLAB;
 			var mcb = ItemsHM.MICROBLOCK.forItem(theType, cutStack, false);
 			if(mcb.isEmpty()) return null;
-			theState = ItemsHM.MICROBLOCK.getMicroblockMaterialState(mcb);
+			theState = MicroblockComponent.getOrDefault(mcb, MicroblockComponent::materialState, Blocks.AIR.defaultBlockState());
 			if(theState == null) return null;
 			return new MicroblockedStack(relX, relY, true, Optional.empty(), theState, cutStack.copyWithCount(1));
 		}
@@ -142,15 +136,9 @@ public class RecipeFuseMicroblock
 	}
 	
 	@Override
-	public ItemStack getResultItem(RegistryAccess access)
+	public ItemStack getResultItem(HolderLookup.Provider access)
 	{
 		return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public ResourceLocation getId()
-	{
-		return id;
 	}
 	
 	@Override
@@ -162,21 +150,24 @@ public class RecipeFuseMicroblock
 	public static class SimpleSerializer
 			implements RecipeSerializer<RecipeFuseMicroblock>
 	{
+		public static final MapCodec<RecipeFuseMicroblock> CODEC = MapCodec.unit(RecipeFuseMicroblock::new);
+		public static final StreamCodec<RegistryFriendlyByteBuf, RecipeFuseMicroblock> STREAM_CODEC = StreamCodec.of(
+				(buf, recipe) ->
+				{
+				},
+				buf -> new RecipeFuseMicroblock()
+		);
+		
 		@Override
-		public RecipeFuseMicroblock fromJson(ResourceLocation id, JsonObject p_44104_)
+		public MapCodec<RecipeFuseMicroblock> codec()
 		{
-			return new RecipeFuseMicroblock(id);
+			return CODEC;
 		}
 		
 		@Override
-		public @Nullable RecipeFuseMicroblock fromNetwork(ResourceLocation id, FriendlyByteBuf buf)
+		public StreamCodec<RegistryFriendlyByteBuf, RecipeFuseMicroblock> streamCodec()
 		{
-			return new RecipeFuseMicroblock(id);
-		}
-		
-		@Override
-		public void toNetwork(FriendlyByteBuf buf, RecipeFuseMicroblock recipe)
-		{
+			return STREAM_CODEC;
 		}
 	}
 }

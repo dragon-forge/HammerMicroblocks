@@ -1,14 +1,19 @@
 package org.zeith.multipart.microblocks.compat.jei;
 
-import mezz.jei.api.*;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
-import org.zeith.multipart.microblocks.api.recipe.*;
-import org.zeith.multipart.microblocks.api.recipe.combination.*;
+import org.zeith.multipart.microblocks.api.data.MicroblockComponent;
+import org.zeith.multipart.microblocks.api.recipe.GatherMicroblockConversionRecipesEvent;
+import org.zeith.multipart.microblocks.api.recipe.MicroblockConversionRecipe;
+import org.zeith.multipart.microblocks.api.recipe.combination.GatherMicroblockComboRecipesEvent;
+import org.zeith.multipart.microblocks.api.recipe.combination.IMicroblockComboRecipe;
 import org.zeith.multipart.microblocks.contents.items.ItemSaw;
 import org.zeith.multipart.microblocks.init.ItemsHM;
 
@@ -56,12 +61,8 @@ public class JEIHammerMicroblocks
 	{
 		registration.registerSubtypeInterpreter(ItemsHM.MICROBLOCK, (ingredient, context) ->
 		{
-			var mcb = ingredient.getTagElement("Microblock");
-			if(mcb != null)
-			{
-				var type = ResourceLocation.tryParse(mcb.getString("Type"));
-				return type + ";";
-			}
+			var mcb = ingredient.get(MicroblockComponent.TYPE);
+			if(mcb != null) return mcb.type().getDescriptionId() + ";";
 			return "null";
 		});
 	}

@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.api.io.NBTSerializable;
@@ -98,7 +98,7 @@ public class MicroblockEntity
 	@Override
 	public boolean canHarvestPart(Player player)
 	{
-		return ForgeHooks.isCorrectToolForDrops(state.asBlockState(), player);
+		return EventHooks.doPlayerHarvestCheck(player, state.asBlockState(), player.level(), position.pos());
 	}
 	
 	@Override

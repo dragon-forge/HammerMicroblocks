@@ -3,18 +3,22 @@ package org.zeith.multipart.microblocks.compat.jei;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import org.zeith.hammerlib.util.mcf.Resources;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.recipe.MicroblockIngredient;
 import org.zeith.multipart.microblocks.api.recipe.combination.*;
-import org.zeith.multipart.microblocks.init.*;
+import org.zeith.multipart.microblocks.init.ItemsHM;
+import org.zeith.multipart.microblocks.init.MicroblockTypesHM;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MicroblockCombinationCategory
 		implements IRecipeCategory<IMicroblockComboRecipe>
@@ -28,7 +32,7 @@ public class MicroblockCombinationCategory
 	{
 		this.helper = helper;
 		
-		this.background = helper.createDrawable(new ResourceLocation("textures/gui/container/crafting_table.png"), 29, 16, 116, 54);
+		this.background = helper.createDrawable(Resources.location("textures/gui/container/crafting_table.png"), 29, 16, 116, 54);
 		this.icon = helper.createDrawableItemStack(ItemsHM.MICROBLOCK.forItemRaw(MicroblockTypesHM.HOLLOW_COVER, Items.STONE.getDefaultInstance(), 1));
 		this.title = Component.translatable("jei." + HammerMicroblocks.MOD_ID + ".microblock_combination");
 	}
@@ -71,8 +75,8 @@ public class MicroblockCombinationCategory
 		
 		if(recipe instanceof ShapedMicroblockRecipe r)
 		{
-			width = r.height();
-			height = r.width();
+			width = r.width();
+			height = r.height();
 			inputsRaw = r.inputs();
 		} else if(recipe instanceof ShapelessMicroblockRecipe r)
 		{
@@ -84,7 +88,6 @@ public class MicroblockCombinationCategory
 			List<ItemStack> itemsHere = new ArrayList<>();
 			if(obj.isFullBlock()) itemsHere.add(materials.copyWithCount(1));
 			else HammerMicroblocks.microblockTypes()
-					.getValues()
 					.stream()
 					.filter(obj::matchesType)
 					.map(t -> ItemsHM.MICROBLOCK.forItemRaw(t, materials, 1))

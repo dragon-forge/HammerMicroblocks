@@ -1,8 +1,8 @@
 package org.zeith.multipart.microblocks.api.recipe;
 
 import com.google.common.collect.Lists;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,7 +20,7 @@ public class GatherMicroblockConversionRecipesEvent
 	public static List<MicroblockConversionRecipe> get()
 	{
 		List<MicroblockConversionRecipe> recipes = Lists.newArrayList();
-		MinecraftForge.EVENT_BUS.post(new GatherMicroblockConversionRecipesEvent(recipes::add));
+		NeoForge.EVENT_BUS.post(new GatherMicroblockConversionRecipesEvent(recipes::add));
 		return recipes;
 	}
 	
