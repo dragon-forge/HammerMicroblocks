@@ -7,6 +7,8 @@ import java.util.*;
 
 public interface IMicroblockComboRecipe
 {
+	int sortOrder();
+	
 	Optional<FusionRecipeResult> matchAndGetResult(List<MicroblockedStack> provided, int width, int height);
 	
 	FusionRecipeResult getBaseResult();

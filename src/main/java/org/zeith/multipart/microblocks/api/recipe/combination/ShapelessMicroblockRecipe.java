@@ -15,6 +15,12 @@ public record ShapelessMicroblockRecipe(
 		implements IMicroblockComboRecipe
 {
 	@Override
+	public int sortOrder()
+	{
+		return 1;
+	}
+	
+	@Override
 	public Optional<FusionRecipeResult> matchAndGetResult(List<MicroblockedStack> provided, int width, int height)
 	{
 		if(matches(provided))

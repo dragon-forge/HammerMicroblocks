@@ -1,10 +1,10 @@
 # Mod Info
-mod_version=21.0.1
+mod_version=21.0.2
 build_candidate=false
 
 # Mod dependencies (jei is not a requirement, but HammerLib is)
 hl_version=21.0.6
-hmp_version=21.0.1
+hmp_version=21.0.2
 jei_version=19.0.0.1
 
 # Persistent mod info

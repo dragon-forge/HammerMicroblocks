@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.common.NeoForge;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GatherMicroblockComboRecipesEvent
@@ -21,6 +21,7 @@ public class GatherMicroblockComboRecipesEvent
 	{
 		List<IMicroblockComboRecipe> recipes = Lists.newArrayList();
 		NeoForge.EVENT_BUS.post(new GatherMicroblockComboRecipesEvent(recipes::add));
+		recipes.sort(Comparator.comparingInt(IMicroblockComboRecipe::sortOrder));
 		return recipes;
 	}
 	
