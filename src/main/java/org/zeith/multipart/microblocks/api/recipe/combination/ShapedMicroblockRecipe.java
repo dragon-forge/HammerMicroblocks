@@ -15,10 +15,16 @@ public record ShapedMicroblockRecipe(
 		NonNullList<MicroblockIngredient> inputs,
 		MicroblockType output,
 		boolean outputIsFullBlock,
-		int count
+		int count,
+		long nonEmptyInputCount
 )
 		implements IMicroblockComboRecipe
 {
+	public ShapedMicroblockRecipe(int width, int height, NonNullList<MicroblockIngredient> inputs, MicroblockType output, boolean outputIsFullBlock, int count)
+	{
+		this(width, height, inputs, output, outputIsFullBlock, count, inputs.stream().filter(o -> o != MicroblockIngredient.EMPTY).count());
+	}
+	
 	public static ShapedMicroblockRecipe newRecipe(MicroblockType output, boolean outputIsFullBlock, int count, RecipeShape shape, Tuple2<Character, MicroblockIngredient>... mappings)
 	{
 		shape = rotate(shape);
@@ -76,7 +82,7 @@ public record ShapedMicroblockRecipe(
 	
 	public boolean matches(List<MicroblockedStack> provided, int providedWidth, int providedHeight)
 	{
-		if(provided.stream().filter(Objects::nonNull).count() != (long) width * height) return false;
+		if(provided.stream().filter(Objects::nonNull).count() != nonEmptyInputCount) return false;
 		for(int x = 0; x <= providedWidth - this.width; ++x)
 		{
 			for(int y = 0; y <= providedHeight - this.height; ++y)

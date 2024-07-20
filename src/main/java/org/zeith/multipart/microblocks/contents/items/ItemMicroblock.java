@@ -1,28 +1,33 @@
 package org.zeith.multipart.microblocks.contents.items;
 
 import net.minecraft.Util;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.*;
+import net.minecraft.tags.TagEntry;
+import net.minecraft.tags.TagLoader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.EmptyBlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.HammerLib;
 import org.zeith.hammerlib.api.items.ITabItem;
 import org.zeith.hammerlib.event.recipe.BuildTagsEvent;
 import org.zeith.multipart.api.item.IMultipartPlacerItem;
-import org.zeith.multipart.api.placement.*;
+import org.zeith.multipart.api.placement.PartPlacement;
+import org.zeith.multipart.api.placement.PlacedPartConfiguration;
 import org.zeith.multipart.microblocks.HammerMicroblocks;
 import org.zeith.multipart.microblocks.api.MicroblockType;
 import org.zeith.multipart.microblocks.api.tile.MicroblockState;
-import org.zeith.multipart.microblocks.init.*;
 import org.zeith.multipart.microblocks.contents.multipart.MicroblockPartDefinition;
+import org.zeith.multipart.microblocks.init.PartDefinitionsHM;
+import org.zeith.multipart.microblocks.init.TagsHM;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -278,7 +283,7 @@ public class ItemMicroblock
 	}
 	
 	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
+	public void fillItemCategory(CreativeModeTab tab, Set<ItemStack> items)
 	{
 		if(!allowedIn(tab)) return;
 		
